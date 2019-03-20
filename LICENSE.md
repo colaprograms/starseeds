@@ -13,7 +13,7 @@ Comfortaa-Bold.ttf by Johan Aakerlund (aajohan@gmail.com) is under the SIL Open 
 
 #### Unity and the Meta 2 SDK
 
-The Unity stuff and the Meta 2 SDK is under whatever license. Is Meta even still a company?
+The Unity boilerplate and the Meta 2 SDK are under whatever license. Is Meta even still a company?
 
 #### A few lines of the automatic compilation system
 
