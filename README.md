@@ -25,14 +25,14 @@ Okay.
 
 To get regular 3d:
 
-Enable Main Camera.
-Disable MetaCameraRig.
-On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".
+Enable Main Camera.  
+Disable MetaCameraRig.  
+On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".  
 On panels, disable the script "Meta Locking" and enable "Lock_to_camera_ii".
 
 To get the headset, do the opposite:
 
-Disable Main Camera.
-Enable MetaCameraRig.
-On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".
+Disable Main Camera.  
+Enable MetaCameraRig.  
+On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".  
 On panels, enable the script "Meta Locking" and disable "Lock_to_camera_ii".
