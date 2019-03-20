@@ -1,0 +1,14 @@
+We get information about the local stars from ESA Gaia Archive
+using ADQL (Astronomical Data Query Language).
+
+l: Galactic longitude
+b: Galactic latitude
+
+SELECT source_id, l, b, dist.r_est, lum_val
+    FROM external.gaiadr2_geometric_distance as dist
+    JOIN gaiadr2.gaia_source AS src USING (source_id)
+
+SELECT source_id, src.l, src.b, dist.r_est, src.astrometric_pseudo_colour, src.phot_g_mean_flux, src.phot_bp_mean_flux, src.phot_rp_mean_flux, src.radius_val, src.lum_val
+	FROM external.gaiadr2_geometric_distance as dist
+	JOIN gaiadr2.gaia_source AS src USING (source_id) 
+   WHERE dist.r_est < 90

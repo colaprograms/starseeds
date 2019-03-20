@@ -1,0 +1,48 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class annulus_generator : MonoBehaviour {
+    float[] vertices = {
+        0f, 0f, 0f,
+        1f, 0f, 0f,
+        0f, -1f, 0f
+    };
+    int[] edges = {
+        0, 1, 2
+    };  
+
+    [ExecuteInEditMode]
+	void Start () {
+	}
+    
+    [ContextMenu("Create mesh")]
+    void Create() {
+        var mf = GetComponent<MeshFilter>();
+        var mesh = new Mesh();
+        mesh.name = "cylindrical annulus";
+        mesh.vertices = generate_vertices();
+        mesh.triangles = edges;
+        mf.mesh = mesh;
+        Debug.Log("run");
+    }
+    
+    Vector3[] generate_vertices() {
+        if(vertices.Length % 3 != 0)
+            throw new System.Exception("length of vertices is not a multiple of 3");
+        int len = vertices.Length / 3;
+        Vector3[] vert = new Vector3[len];
+        for(int i = 0; i < vertices.Length; i += 3) {
+            vert[i / 3] = new Vector3(
+                vertices[i],
+                vertices[i+1],
+                vertices[i+2]);
+        }
+        return vert;
+    }
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+}

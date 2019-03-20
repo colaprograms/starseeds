@@ -1,0 +1,303 @@
+/* based on the code from http://www.arcturuscollective.com/archives/22 */
+
+using Microsoft.CSharp;
+using System;
+using System.CodeDom.Compiler;
+using System.Reflection;
+using System.Text;
+using System.Collections.Generic;
+using UnityEngine;
+
+/* This class manages a bunch of scripts in the rezolve\ directory
+ * that create game objects. When a script is modified, all its
+ * game objects are deleted, it is recompiled, and then it starts
+ * again and makes some more game objects.
+ *
+ * To make an object that is owned by a script, call RezFactory.Rez().
+ * To delete it, call RezFactory.DeRez() or just crash.
+ */
+
+public class RezFactory {
+    Dictionary<GameObject, bool> registered;
+    public RezFactory() {
+        registered = new Dictionary<GameObject, bool>();
+    }
+    public GameObject Rez(GameObject template)
+    {
+        GameObject newObject = UnityEngine.Object.Instantiate(template);
+        if(registered.ContainsKey(newObject))
+            throw new System.Exception("the dictionary is broken");
+        registered[newObject] = true;
+        Debug.Log(String.Format("creating {0}", newObject));
+        return newObject;
+    }
+    public void DeRez(GameObject obj)
+    {
+        if(!registered.ContainsKey(obj))
+            throw new System.Exception("cannot derez: object was never rezed");
+        registered.Remove(obj);
+        Debug.Log(String.Format("destroying {0}", obj));
+        UnityEngine.Object.Destroy(obj);
+    }
+    public void DestroyEverything()
+    {
+        if(registered == null) {
+            return;
+        }
+        foreach(KeyValuePair<GameObject, bool> badObject in registered) {
+            Debug.Log(String.Format("destroying {0}", badObject.Key));
+            UnityEngine.Object.Destroy(badObject.Key);
+        }
+        registered = null;
+    }
+    public void Glitch()
+    {
+        var glitch = Shader.Find("glitchshader");
+        foreach(KeyValuePair<GameObject, bool> badObject in registered) {
+            var mat = badObject.Key.GetComponent<Renderer>().material;
+            Debug.Log("replacing shaders");
+            Debug.Log(mat);
+            mat.shader = glitch;
+        }
+    }
+}
+
+public class Rezolve {
+    public RezFactory rezFactory;
+    public GameObject Rez(GameObject template) {
+        return rezFactory.Rez(template);
+    }
+    public void DeRez(GameObject obj) {
+        rezFactory.DeRez(obj);
+    }
+    public GameObject Find(string name) {
+        return GameObject.Find("rezolve").transform.Find(name).gameObject;
+    }
+    
+    public virtual void start() {}
+    public virtual void update() {}
+}
+
+public class RezolveFile {
+    Rezolve rez;
+    RezFactory rezf;
+    Action<Exception> exceptf;
+    bool valid = false;
+    bool started = false;
+    bool todestroy = false;
+    bool glitched = false;
+    DateTime lastWriteTime;
+    
+    public RezolveFile(Assembly assm, String name, DateTime when,
+                          Action<Exception> __exceptf) {
+        exceptf = __exceptf;
+        try {
+            rez = assm.CreateInstance(name) as Rezolve;
+            rezf = new RezFactory();
+            rez.rezFactory = rezf;
+            lastWriteTime = when;
+            valid = true;
+        }
+        catch(Exception exc) {
+            destroy();
+            __exceptf(exc);
+        }
+    }
+    
+    public void destroy() {
+        if(rezf != null) {
+            todestroy = true;
+        }
+        rez = null;
+        valid = false;
+    }
+    
+    public bool is_it_valid() {
+        return valid;
+    }
+    
+    public bool still_newest(DateTime newLastWriteTime) {
+        return newLastWriteTime <= lastWriteTime;
+    }
+    
+    void safetyrun(Action act) {
+        try {
+            act.Invoke();
+        }
+        catch(Exception exc) {
+            destroy();
+            exceptf(exc);
+        }
+    }
+    
+    public void update() {
+        if(!valid) {
+            if(todestroy) {
+                rezf.DestroyEverything();
+                rezf = null;
+                todestroy = false;
+            }
+            return;
+        }
+        if(glitched)
+            return;
+        if(!started) {
+            started = true;
+            safetyrun(rez.start);
+        }
+        safetyrun(rez.update);
+    }
+    
+    public void glitch() {
+        rezf.Glitch();
+        glitched = true;
+    }
+};      
+
+public class rezz : MonoBehaviour
+{
+    [System.NonSerialized]
+    System.IO.FileSystemWatcher dirwat;
+    [System.NonSerialized]
+    Dictionary<string, RezolveFile> rezolve;
+    [System.NonSerialized]
+    string path;
+    [System.NonSerialized]
+    System.Collections.Concurrent.ConcurrentQueue<Action> queue;
+    
+	void Start()
+	{
+        path = System.IO.Path.Combine(Application.streamingAssetsPath, "rezolve");
+        queue = new System.Collections.Concurrent.ConcurrentQueue<Action>();
+        dirwat = new System.IO.FileSystemWatcher();
+        dirwat.Path = path;
+        dirwat.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+        dirwat.Filter = "*.cs";
+        dirwat.Created += onchanged;
+        dirwat.Changed += onchanged;
+        dirwat.EnableRaisingEvents = true;
+        reload();
+	}
+    
+    void Update()
+    {
+        Action thejam;
+        while(queue.TryDequeue(out thejam)) {
+            thejam.Invoke();
+        }
+        foreach(KeyValuePair<string, RezolveFile> rez in rezolve) {
+            rez.Value.update();
+        }
+    }
+    
+    string nameof(string file)
+    {
+        return System.IO.Path.GetFileNameWithoutExtension(file);
+    }
+    
+    void onchanged(object source, System.IO.FileSystemEventArgs e)
+    {
+        //Debug.Log(String.Format("modified {0}", e.Name));
+        var name = nameof(e.FullPath);
+        Debug.Log(String.Format("Recompiling {0}", name));
+        if(rezolve.ContainsKey(name)) {
+            Action thejam = delegate() { glitch_object(name); };
+            queue.Enqueue(thejam);
+        }
+        Compile(name, e.FullPath);
+    }
+    
+    void reload()
+    {
+        if(rezolve == null)
+            rezolve = new Dictionary<string, RezolveFile>();
+        foreach(string file in System.IO.Directory.GetFiles(path, "*.cs")) {
+            var name = nameof(file);
+            bool recompile = true;
+            bool objectexists = false;
+            if(rezolve.ContainsKey(name)) {
+                objectexists = true;
+                System.IO.FileInfo f = new System.IO.FileInfo(file);
+                if(rezolve[name].still_newest(f.LastWriteTime))
+                    recompile = false;
+            }
+            if(recompile) {
+                Debug.Log(String.Format("Compiling {0}", name));
+                if(objectexists) {
+                    Debug.Log(String.Format("Glitching {0}", name));
+                    Action thejam = delegate() {
+                        glitch_object(name);
+                    };
+                    queue.Enqueue(thejam);
+                }
+                Compile(name, file);
+            }
+        }
+    }
+
+	void Compile(string name, string file)
+	{
+		var provider = new CSharpCodeProvider();
+		var param = new CompilerParameters();
+
+		// Add ALL of the assembly references
+		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+		{
+			param.ReferencedAssemblies.Add(assembly.Location);
+		}
+
+		// Add specific assembly references
+		//param.ReferencedAssemblies.Add("System.dll");
+		//param.ReferencedAssemblies.Add("CSharp.dll");
+		//param.ReferencedAssemblies.Add("UnityEngines.dll");
+
+		// Generate a dll in memory
+		param.GenerateExecutable = false;
+		param.GenerateInMemory = true;
+        var result = provider.CompileAssemblyFromFile(param, file);
+
+		if (result.Errors.Count > 0) {
+			var msg = new StringBuilder();
+			foreach (CompilerError error in result.Errors) {
+				msg.AppendFormat("Error ({0}): {1}\n",
+					error.ErrorNumber, error.ErrorText);
+			}
+            compileexcept(msg.ToString());
+		}
+        
+        System.IO.FileInfo f = new System.IO.FileInfo(file);
+
+        var rez = new RezolveFile(result.CompiledAssembly, name,
+                                      f.LastWriteTimeUtc, except);
+        if(rez.is_it_valid()) {
+            Action thejam = delegate() {
+                start_object(name, rez);
+            };
+            queue.Enqueue(thejam);
+        }
+	}
+    
+    void except(Exception e)
+    {
+        Debug.Log(e.ToString());
+    }
+    
+    void compileexcept(string probs)
+    {
+        Debug.Log(probs);
+    }
+    
+    void glitch_object(string name)
+    {
+        rezolve[name].glitch();
+    }
+    
+    void start_object(string name, RezolveFile rez)
+    {
+        if(rezolve.ContainsKey(name)) {
+            rezolve[name].destroy();
+            rezolve[name].update();
+        }
+        rezolve[name] = rez;
+    }
+}

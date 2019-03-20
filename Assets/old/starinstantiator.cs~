@@ -1,0 +1,146 @@
+﻿using UnityEngine;
+
+public static class gaussian {
+    static double nonzero_random() {
+        double z = 0.0;
+        while(z == 0)
+            z = UnityEngine.Random.value;
+        return z;
+    }
+    public static Vector2 two() {
+        double z1 = nonzero_random();
+        double z2 = nonzero_random() * 2 * System.Math.PI;
+        double ra = System.Math.Sqrt(-2 * System.Math.Log(z1));
+        return new Vector2(
+            (float) (ra * System.Math.Cos(z2)),
+            (float) (ra * System.Math.Sin(z2))
+        );
+    }
+    public static Vector3 three() {
+        Vector2 a = two();
+        Vector2 b = two();
+        return new Vector3(a.x, a.y, b.x);
+    }
+    public static Vector3 three(float cutoff) {
+        Vector3 a = three();
+        while(a.magnitude > 1)
+            a = three();
+        return a;
+    }
+}
+
+public class starinstantiator : MonoBehaviour
+{
+    public GameObject system;
+    public GameObject reticle;
+    
+    [System.NonSerialized]
+    bool reset = true;
+    [System.NonSerialized]
+    GameObject instantiated;
+    
+    int selectindex = -1;
+    
+    readonly Color SELECT_COLOR = new Color(1, 1, 1, 1);
+    const float SELECT_SIZE = 0.04f;
+    Color oldcolor;
+    float oldsize;
+    
+    ParticleSystem.Particle[] particles;
+    
+    const int NPARTICLE = 24;
+    float rotation = 0;
+    
+    void reboot()
+    {
+        reset = false;
+        
+        instantiated = Instantiate(system);
+        particles = new ParticleSystem.Particle[NPARTICLE];
+        instantiated.SetActive(true);
+        //instantiated.hideFlags = HideFlags.HideAndDontSave;
+        
+        ParticleSystem xx = instantiated.GetComponent<ParticleSystem>();
+        for(int i = 0; i < NPARTICLE; i++) {
+            particles[i].position = 0.04f * gaussian.three();
+            particles[i].startLifetime = Mathf.Infinity;
+            particles[i].startSize = 0.02f;
+            particles[i].startColor = new Color(Random.value, Random.value, Random.value, 1);
+        }
+        xx.SetParticles(particles, NPARTICLE);
+        GameConsole.add(
+            System.String.Format("{0} stars", NPARTICLE)
+        );
+    }
+    
+    void OnDisable() {
+        Destroy(instantiated);
+    }
+    
+    void Start()
+    {
+        reboot();
+    }
+    
+    void set_one_particle(int index, Color color, float size) {
+        /* Sets the color of particles[index] to color,
+         * and then updates it in the particle system. */
+        particles[index].startColor = color;
+        particles[index].startSize = size;
+        // Documentation claims that you can call SetParticles(array, size, index)
+        // to set a range of particles but apparently not.
+        instantiated.GetComponent<ParticleSystem>()
+            .SetParticles(particles, particles.Length);
+    }
+    
+    void removeselect() {
+        /* Deselect the particle which is selected,
+         * returning it to oldcolor. */
+        if(selectindex != -1) {
+            set_one_particle(selectindex, oldcolor, oldsize);
+            selectindex = -1;
+        }
+    }
+    
+    void addselect(int index) {
+        /* Select <index> and change the color to SELECT_COLOR,
+         * saving the original color to oldcolor. */
+        if(index < 0 || index >= particles.Length)
+            throw new System.Exception("hey index was invalid");
+        if(selectindex != -1)
+            removeselect();
+        oldcolor = particles[index].startColor;
+        oldsize = particles[index].startSize;
+        selectindex = index;
+        set_one_particle(selectindex, oldcolor, SELECT_SIZE);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(reset)
+            reboot();
+        if(reticle) {
+            Vector3 retipos = instantiated.transform.InverseTransformPoint(
+                reticle.transform.position);
+            float dist = 0.08f;
+            float curdist;
+            int closestindex = -1;
+            for(int i = 0; i < particles.Length; i++) {
+                curdist = Vector3.Distance(retipos, particles[i].position);
+                if(curdist < dist) {
+                    dist = curdist;
+                    closestindex = i;
+                }
+            }
+            if(closestindex != -1)
+                addselect(closestindex);
+            else
+                removeselect();
+            //Debug.Log(System.String.Format("position {0}", retipos));
+        }
+        rotation += Time.deltaTime;
+        instantiated.transform.rotation =
+            Quaternion.AngleAxis(4 * rotation, Vector3.up);
+    }
+}
