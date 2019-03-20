@@ -89,9 +89,16 @@ public class starlined: Rezolve
                 sb.Append("\n");
             else
                 first = false;
+            string name = "";
+            if(s.proper != "")
+                name = s.proper;
+            else if(s.hd != 0)
+                name = String.Format("HD {0} in {1}", s.hd, s.constellation);
+            else if(s.constellation != "")
+                name = String.Format("Star in {0}", s.constellation);
             sb.Append(String.Format(
                 "{0}\n{1}\n{2}\n",
-                    s.proper,
+                    name,
                     s.spect,
                     s.absmag
                     ));

@@ -16,10 +16,12 @@ public class star {
     const int NFILEFIELDS = 37;
     public string bf, proper, spect, constellation; // Bayer/Flamsteed designation
     public float x, y, z, absmag, ci;
-    public UInt32 id;
+    public UInt32 id, hip, hd;
     public static star makestar(BinaryReader bs, Func<UInt32, UInt32, string> getstring) {
         var star = new star {
             id = bs.ReadUInt32(),
+            hip = bs.ReadUInt32(),
+            hd = bs.ReadUInt32(),
             x = bs.ReadSingle(),
             y = bs.ReadSingle(),
             z = bs.ReadSingle(),

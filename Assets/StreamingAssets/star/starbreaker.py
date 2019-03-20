@@ -4,6 +4,8 @@ single-precision floating point numbers and a strings file."""
 import math
 import csv
 import struct
+HIPPARC_FIELD = 1
+HD_FIELD = 2
 BAYER_FLAMSTEED_FIELD = 5
 PROPER_FIELD = 6
 X_FIELD = 17
@@ -47,8 +49,10 @@ class outfile:
                 starid |= PART_OF_GROUP
             else:
                 first = False
-            self.data_file.write(struct.pack("IfffffIIIIIIII",
+            self.data_file.write(struct.pack("IIIfffffIIIIIIII",
                 starid,
+                star.hip,
+                star.hd,
                 star.x,
                 star.y,
                 star.z,
@@ -120,6 +124,8 @@ class Star:
     def __init__(self, r):
         try:
             self.id = int(r[0])
+            self.hip = int(r[HIPPARC_FIELD]) if r[HIPPARC_FIELD] != "" else 0
+            self.hd = int(r[HD_FIELD]) if r[HD_FIELD] != "" else 0
             self.bf = r[BAYER_FLAMSTEED_FIELD]
             self.proper = r[PROPER_FIELD]
             self.x = float(r[X_FIELD])
@@ -175,6 +181,8 @@ class Pile:
                         self.un.union(v[i], v[j])
         return self.un.get_all_groups()
 
+import math
+
 def run():
     f = open("star.csv", "r")
     rr = csv.reader(f, delimiter=',')
@@ -184,6 +192,9 @@ def run():
     pile = Pile()
     for r in rr:
         st = Star(r)
+        d = math.sqrt(st.x * st.x + st.y * st.y + st.z * st.z)
+        if d > 1000:
+            continue
         lines += 1
         if lines % 10000 == 0: print("%d lines" % lines)
         pile.addto(st)
