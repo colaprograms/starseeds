@@ -11,6 +11,10 @@ The file Assets\StreamingAssets\star\star.dat can be generated from hygdatav3.cs
 
 Comfortaa-Bold.ttf by Johan Aakerlund (aajohan@gmail.com) is under the SIL Open Font License (http://scripts.sil.org/OFL).
 
+#### Unity and the Meta 2 SDK
+
+The Unity stuff and the Meta 2 SDK is under whatever license. Is Meta even still a company?
+
 #### A few lines of the automatic compilation system
 
 Some lines of the ReallyCompile routine are based on the example code from http://www.arcturuscollective.com/archives/22
