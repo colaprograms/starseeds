@@ -19,4 +19,4 @@ It is not finished. See issues for status.
 
 Okay.
 
-![Screenshot from March 20, 2019](screenshots/screenshot-2019-03-20.jpeg)
+![Screenshot from March 20, 2019](screenshots/screenshot-2019-03-20.jpg)
