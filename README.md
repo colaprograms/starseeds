@@ -15,17 +15,20 @@ An example empty file would be
     using System.IO;
 
     public class i_love_sphere: Rezolve {
-        GameObject sphere;
-        GameObject smallSphere;
+        GameObject largesphere, smallsphere;
         
         public override void start() {
             /* Rez copies a game object and associates it with this Rezolve object.
-             * But GameObject.Find can't find objects that are inactive. */
-            smallsphere = Rez(GameObject.Find("small_sphere_for_i_love_sphere"));
+             * But GameObject.Find can't find objects that are inactive.
+             *
+             * Note that Rez is an instance method. If you want to call it from
+             * another class, then pass it as a callback or something similar. */
+            smallsphere = Rez(GameObject.Find("small_sphere"));
+            
             /* Find finds a child of the rezolve object, even if it is inactive.
              * You can also call RezFind() instead of Rez(Find()). */
-            sphere = Rez(Find("sphere_for_i_love_sphere"));
-            sphere.SetActive(true);
+            largesphere = Rez(Find("large_sphere"));
+            largesphere.SetActive(true);
         }
 
         public override void update() {
