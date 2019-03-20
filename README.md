@@ -19,4 +19,4 @@ It is not finished. See issues for status.
 
 Okay.
 
-[[screenshot-2019-03-20.jpeg]]
+![Screenshot from March 20, 2019](screenshot-2019-03-20.jpeg)
