@@ -1,6 +1,6 @@
 # starseeds
 
-This small AR game was written for the Meta 2 headset by Hannah Cairns <hannah.abigail.cairns@gmail.com>.
+This small AR game was written for the Meta 2 headset by [Hannah Cairns](mailto:hannah.abigail.cairns@gmail.com).
 
 Send little green ships from stars you control to ones that you don't, and then build new launchers. Try to get as far from Earth as possible. Avoid getting a virus.
 
