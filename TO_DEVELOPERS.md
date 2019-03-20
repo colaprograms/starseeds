@@ -1,5 +1,7 @@
 If you also want to write a program for the headset, check out the Rezolve System in rezz.cs.
+
 You can put cs files in Assets\StreamingAssets\rezolve and they will be compiled and run automatically as the game is playing!
+
 Even better, the objects created by the old files will be automatically deallocated, if you follow the rules.
 
 A simple example of a Rezolve object:
