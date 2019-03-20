@@ -20,3 +20,19 @@ It is not finished. See issues for status.
 Okay.
 
 ![Screenshot from March 20, 2019](screenshots/screenshot-2019-03-20.jpg)
+
+## Switching between the headset and regular 3d on the monitor
+
+To get regular 3d:
+
+Enable Main Camera.
+Disable MetaCameraRig.
+On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".
+On panels, disable the script "Meta Locking" and enable "Lock_to_camera_ii".
+
+To get the headset, do the opposite:
+
+Disable Main Camera.
+Enable MetaCameraRig.
+On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".
+On panels, enable the script "Meta Locking" and disable "Lock_to_camera_ii".
