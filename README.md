@@ -12,7 +12,7 @@ It is not finished. See issues for status.
 
 1. Select a green star with the chevron that is stuck to your head.
 2. Hit the space bar, and select another star.
-3. Let go of the space bar. A little green dot will travel slowly to the new star.
+3. Let go of the space bar. A little green dot will travel slowly to the new star. It will become green, and more stars will be revealed in its neighbourhood, if there are any.
 4. Repeat!
 
 #### I want to see a screenshot!
