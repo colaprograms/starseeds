@@ -5,7 +5,7 @@ The program "Starseeds" is in the public domain, except for:
 The HYG star database compiled by David Nash is under the CC-BY-SA license (https://creativecommons.org/licenses/by-sa/2.5/).
 See https://github.com/astronexus/HYG-Database.
 
-The file Assets\StreamingAssets\star\star.dat can be generated from hygdatav3.csv by renaming it to star.csv and running starbreaker.py.
+The file Assets\StreamingAssets\star\star.dat can be generated from https://github.com/astronexus/HYG-Database/blob/master/hygdata_v3.csv by renaming it to star.csv and running starbreaker.py.
 
 #### Comfortaa Bold by Johan Aakerlund
 
