@@ -32,6 +32,7 @@ public static class gaussian { // test
 }
 
 public class greenstar {
+    bool isred = false;
 }
 
 struct range {
@@ -68,6 +69,7 @@ public class starinstantiator : Rezolve
         which_stars_are_green = new Dictionary<int, greenstar>();
         GameDad.setmode = setmode;
         GameDad.add_green = add_green;
+        GameDad.add_red = add_red;
         GameDad.remove_green = remove_green;
         GameDad.is_green = delegate(int i) {
             return which_stars_are_green.ContainsKey(i);
@@ -103,11 +105,11 @@ public class starinstantiator : Rezolve
         }
     }
     
-    public void add_green(int i)
+    public void add_green(int i, bool isred)
     {
         if(which_stars_are_green.ContainsKey(i))
             throw new System.Exception("already green");
-        else {
+        else { // test
             range s = star_to_particle_range[i];
             particles[s.start].startColor = new Color(0f, 1f, 0f, 1f);
             particles[s.start].startSize = 0.01f;
@@ -120,6 +122,14 @@ public class starinstantiator : Rezolve
             }
             setparticles_later = true;
         }
+    }
+    
+    public void add_green(int i) {
+        add_green(i, false);
+    }
+    
+    public void add_red(int i) {
+        add_green(i, true);
     }
     
     void mouseover_nothing() {

@@ -27,6 +27,7 @@ public class GameDad {
     
     public static Action<StarInstantiatorMode> setmode = null;
     public static Action<int> add_green = null;
+    public static Action<int> add_red = null;
     public static Action<int> remove_green = null;
     public static Func<int, bool> is_green = null;
 }

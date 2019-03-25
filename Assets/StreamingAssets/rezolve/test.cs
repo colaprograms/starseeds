@@ -6,6 +6,7 @@ class test: Rezolve {
     float time = 0f;
     
     public override void start() {
+        throw new Exception("yikes!");
         //sphere = Rez(GameObject.Find("Sphere"));
         //sphere.GetComponent<Renderer>().material = Resources.Load("glitchmaterial") as Material;
         //sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
