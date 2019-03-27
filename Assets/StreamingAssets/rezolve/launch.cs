@@ -114,8 +114,23 @@ public class launch: Rezolve
     {
         GameObject starseed = RezFind("starseed_icon");
         Action whenhit = delegate() {
-            if(!GameDad.is_green(end))
-                GameDad.add_green(end);
+            if(!GameDad.is_green(end)) {
+                bool stop = false;
+                if(GameDad.give_chance_to_make_red_star != null) 
+                    stop = GameDad.give_chance_to_make_red_star(end);
+                if(!stop) {
+                    GameDad.add_green(end, null);
+                }
+                /*
+                var star = new greenstar();
+                star.isred = true;
+                GameDad.add_green(end, star);
+                */
+            }
+            else {
+                if(GameDad.starseed_lands_on_star != null)
+                    GameDad.starseed_lands_on_star(end);
+            }
         };
         starseeds[id++] = new starseed_owner(startLocation, endLocation, speed, starseed, whenhit);
     }

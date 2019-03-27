@@ -31,10 +31,6 @@ public static class gaussian { // test
     }
 }
 
-public class greenstar {
-    bool isred = false;
-}
-
 struct range {
     public int start;
     public int length;
@@ -69,8 +65,8 @@ public class starinstantiator : Rezolve
         which_stars_are_green = new Dictionary<int, greenstar>();
         GameDad.setmode = setmode;
         GameDad.add_green = add_green;
-        GameDad.add_red = add_red;
         GameDad.remove_green = remove_green;
+        GameDad.update_green = update_green;
         GameDad.is_green = delegate(int i) {
             return which_stars_are_green.ContainsKey(i);
         };
@@ -105,31 +101,32 @@ public class starinstantiator : Rezolve
         }
     }
     
-    public void add_green(int i, bool isred)
+    public void add_green(int i, greenstar star)
     {
         if(which_stars_are_green.ContainsKey(i))
             throw new System.Exception("already green");
-        else { // test
+        else {
+            if(star == null)
+                star = new greenstar();
+            Debug.Log("running");
+            Debug.Log(star);
             range s = star_to_particle_range[i];
-            particles[s.start].startColor = new Color(0f, 1f, 0f, 1f);
-            particles[s.start].startSize = 0.01f;
+            Color thecolor = star.isred? new Color(1f, 0f, 0f, 1f):
+                                         new Color(0f, 1f, 0f, 1f);
+            particles[s.start].startColor = thecolor;
+            particles[s.start].startSize = star.isred? 0.02f: 0.01f;
             for(int j = 1; j < s.length; j++) {
-                particles[s.start].startColor = new Color(0f, 1f, 0f, 1f);
+                particles[s.start + j].startSize = 0f;
+                particles[s.start + j].startColor = thecolor;
             }
-            which_stars_are_green[i] = new greenstar();
-            foreach(var starix in stars_visible_from(GameDad.manystars.getstar(i).vec)) {
-                allocate_particle_for_star(starix);
+            which_stars_are_green[i] = star;
+            if(!star.isred) {
+                foreach(var starix in stars_visible_from(GameDad.manystars.getstar(i).vec)) {
+                    allocate_particle_for_star(starix);
+                }
             }
             setparticles_later = true;
         }
-    }
-    
-    public void add_green(int i) {
-        add_green(i, false);
-    }
-    
-    public void add_red(int i) {
-        add_green(i, true);
     }
     
     void mouseover_nothing() {
@@ -186,7 +183,10 @@ public class starinstantiator : Rezolve
     IEnumerable<int> greenr() {
         // whee
         foreach(var ix in which_stars_are_green.Keys) {
-            yield return star_to_particle_range[ix].start;
+            if(which_stars_are_green[ix].isred)
+                continue;
+            else
+                yield return star_to_particle_range[ix].start;
         }
     }
     
@@ -297,6 +297,15 @@ public class starinstantiator : Rezolve
         return instantiated.transform.TransformPoint(particles[index].position);
     }
     
+    public void update_green(int index) {
+        greenstar star = which_stars_are_green[index];
+        if(star.isred) {
+            range s = star_to_particle_range[index];
+            particles[s.start].startSize = star.size;
+            setparticles_later = true;
+        }
+    }
+    
     // Update is called once per frame
     public override void update()
     {
@@ -313,7 +322,7 @@ public class starinstantiator : Rezolve
             instantiated.SetActive(true);
             
             allocate_particle_for_star(0);
-            add_green(0);
+            add_green(0, null);
             foreach(var starix in stars_visible_from(new Vector3(0, 0, 0))) {
                 allocate_particle_for_star(starix);
                 Debug.Log(String.Format("allocated {0}", starix));

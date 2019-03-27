@@ -427,7 +427,8 @@ public class rezz : MonoBehaviour
     
     void except(Exception e)
     {
-        Debug.Log(e.ToString());
+        Debug.LogException(e);
+        Debug.Log(e.StackTrace);
     }
     
     void compileexcept(string probs)

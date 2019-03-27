@@ -17,7 +17,7 @@ public class starlined: Rezolve
     public override void start()
     {
         GameDad.starmouseover_hook = starmouseover;
-        startext = GameObject.Find("paneltext");
+        //startext = GameObject.Find("paneltext");
         reticle = GameObject.Find("reticle");
     }
     
@@ -76,6 +76,12 @@ public class starlined: Rezolve
     
     // Hook to run when a star is selected
     public void starmouseover(int starix, Vector3 particlepos)
+    {
+        if(startext != null)
+            changepanel(starix, particlepos);
+    }
+    
+    public void changepanel(int starix, Vector3 particlepos)
     {
         var tt = startext.GetComponent<TextMesh>();
         if(starix == -1) {
