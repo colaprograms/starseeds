@@ -70,6 +70,10 @@ public class starinstantiator : Rezolve
         GameDad.is_green = delegate(int i) {
             return which_stars_are_green.ContainsKey(i);
         };
+        GameDad.get_green = delegate(int i) {
+            return which_stars_are_green[i];
+        };
+        GameDad.whereisstar = whereisstar;
     }
     
     void setmode(StarInstantiatorMode _mode) {
@@ -295,6 +299,13 @@ public class starinstantiator : Rezolve
     
     public Vector3 particlepos(int index) {
         return instantiated.transform.TransformPoint(particles[index].position);
+    }
+    
+    public Vector3 whereisstar(int starix) {
+        if(!star_to_particle_range.ContainsKey(starix))
+            throw new Exception(String.Format("there is no star with index {0}", starix));
+        range r = star_to_particle_range[starix];
+        return particlepos(r.start);
     }
     
     public void update_green(int index) {

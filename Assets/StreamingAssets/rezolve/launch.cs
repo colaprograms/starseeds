@@ -15,14 +15,16 @@ public class starseed_owner
     const float PERIOD = 0.6f;
     bool must_delete_material = false;
     float[] pattern = { 1f, 0.8f, 0.6f, 0.4f, 0.4f, 0.4f, 0.4f, 0.4f };
+    bool isred = false;
     
-    public starseed_owner(Vector3 _startLocation, Vector3 _endLocation, float _speed, GameObject _ob, Action _callback)
+    public starseed_owner(Vector3 _startLocation, Vector3 _endLocation, float _speed, GameObject _ob, Action _callback, bool _isred)
     {
         ob = _ob;
         callback = _callback;
         speed = _speed;
         startLocation = _startLocation;
         endLocation = _endLocation;
+        isred = _isred;
         moveto(0);
         ob.SetActive(true);
         setcolor();
@@ -36,8 +38,8 @@ public class starseed_owner
         
         int where = Mathf.FloorToInt(period_time * pattern.Length);
         float c = pattern[where];
-        ob.GetComponent<Renderer>().material.SetColor("_EmissionColor",
-            new Color(0f, c, 0f, c));
+        Color cc = isred? new Color(c, 0f, 0f, c): new Color(0f, c, 0f, c);
+        ob.GetComponent<Renderer>().material.SetColor("_EmissionColor", cc);
         // apparently unity generates a new material when you do stuff to
         // the material on an object, and you have to delete the material
         // when the object vanishes or you get a memory leak.
@@ -85,23 +87,20 @@ public class launch: Rezolve
     public override void start()
     {
         GameDad.linedrawn_hook = linedrawn;
+        GameDad.send_red_hook = send_red;
         starseeds = new Dictionary<int, starseed_owner>();
     }
     
     public override void update()
     {
-        List<int> toremove = new List<int>();
-        foreach(var idx in starseeds.Keys) {
+        List<int> toupdate = new List<int>();
+        foreach(var idx in starseeds.Keys)
+            toupdate.Add(idx);
+        foreach(var idx in toupdate) {
             if(!starseeds[idx].update()) {
-                // update returned false, so we should remove this starseed, but we
-                // shouldn't mess around with the dictionary while we're iterating over it
-                toremove.Add(idx);
+                starseeds[idx].derez(DeRez);
+                starseeds.Remove(idx);
             }
-        }
-        // remove all the starseeds that we need to remove
-        foreach(var idx in toremove) {
-            starseeds[idx].derez(DeRez);
-            starseeds.Remove(idx);
         }
     }
     
@@ -110,16 +109,32 @@ public class launch: Rezolve
         make_starseed(start, startLocation, end, endLocation, 0.01f);
     }
     
-    public void make_starseed(int start, Vector3 startLocation, int end, Vector3 endLocation, float speed)
+    public void send_red(int start, int end)
     {
-        GameObject starseed = RezFind("starseed_icon");
+        Vector3 startLocation = GameDad.whereisstar(start);
+        Vector3 endLocation = GameDad.whereisstar(end);
+        make_starseed(start, startLocation, end, endLocation, 0.01f, true);
+    }
+    
+    public void make_starseed(int start, Vector3 startLocation, int end, Vector3 endLocation, float speed, bool isred = false)
+    {
+        GameObject starseed = isred? RezFind("spamseed_icon"): RezFind("starseed_icon");
         Action whenhit = delegate() {
-            if(!GameDad.is_green(end)) {
-                bool stop = false;
-                if(GameDad.give_chance_to_make_red_star != null) 
-                    stop = GameDad.give_chance_to_make_red_star(end);
-                if(!stop) {
-                    GameDad.add_green(end, null);
+            if(!isred) {
+                if(GameDad.is_green == null || GameDad.get_green == null)
+                    return;
+                if(!GameDad.is_green(end)) {
+                    bool stop = false;
+                    if(GameDad.give_chance_to_make_red_star != null) 
+                        stop = GameDad.give_chance_to_make_red_star(start, startLocation, end, endLocation);
+                    if(!stop && !GameDad.is_green(end)) {
+                        GameDad.add_green(end, null);
+                    }
+                }
+                else if(GameDad.get_green(end).isred) {
+                    // the player made a mistake
+                    if(GameDad.send_red_hook != null)
+                        GameDad.send_red_hook(end, start);
                 }
                 /*
                 var star = new greenstar();
@@ -132,6 +147,6 @@ public class launch: Rezolve
                     GameDad.starseed_lands_on_star(end);
             }
         };
-        starseeds[id++] = new starseed_owner(startLocation, endLocation, speed, starseed, whenhit);
+        starseeds[id++] = new starseed_owner(startLocation, endLocation, speed, starseed, whenhit, isred);
     }
 }

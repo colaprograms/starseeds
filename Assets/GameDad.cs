@@ -24,6 +24,8 @@ public class GameDad {
     
     public static Action<int, Vector3> starmouseover_hook = null;
     public static Action<int, Vector3, int, Vector3> linedrawn_hook = null;
+    public static Action<int, int> send_red_hook = null;
+    public static Func<int, Vector3> whereisstar = null;
     
     public static Action<StarInstantiatorMode> setmode = null;
     public static Action<int, greenstar> add_green = null;
@@ -32,7 +34,7 @@ public class GameDad {
     
     public static Action<int> update_green = null;
     public static Func<int, greenstar> get_green = null;
-    public static Func<int, bool> give_chance_to_make_red_star = null;
+    public static Func<int, Vector3, int, Vector3, bool> give_chance_to_make_red_star = null;
     public static Action<int> starseed_lands_on_star = null;
 }
 

@@ -21,7 +21,7 @@ public class redstardata {
     }
 }
 
-public class redstar: Rezolve
+public class redstar: Rezolve // test
 {
     Dictionary<int, redstardata> red_stars;
     float time = 0f;
@@ -41,9 +41,11 @@ public class redstar: Rezolve
         return r;
     }
     
-    public bool give_chance_to_make_red_star(int ix) {
-        red_stars[ix] = make_new_red_star(ix);
-        GameDad.add_green(ix, red_stars[ix].star);
+    public bool give_chance_to_make_red_star(int start, Vector3 startLocation, int end, Vector3 endLocation) {
+        red_stars[end] = make_new_red_star(end);
+        GameDad.add_green(end, red_stars[end].star);
+        if(GameDad.send_red_hook != null)
+            GameDad.send_red_hook(end, start);
         return true;
         
         /*
