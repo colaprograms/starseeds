@@ -76,6 +76,7 @@ public class starinstantiator : Rezolve
         };
         GameDad.whereisstar = whereisstar;
         GameDad.realvector_to_spacevector = realvector_to_spacevector;
+        GameDad.star_corresponds_to_particle = star_corresponds_to_particle;
     }
     
     void setmode(StarInstantiatorMode _mode) {
@@ -337,10 +338,17 @@ public class starinstantiator : Rezolve
     }
     
     public Vector3 whereisstar(int starix) {
-        if(!star_to_particle_range.ContainsKey(starix))
-            throw new Exception(String.Format("there is no star with index {0}", starix));
+        //throw new Exception(String.Format("there is no star with index {0}", starix));
+        if(!star_corresponds_to_particle(starix))
+            throw new Exception(String.Format("star {0} does not correspond to a particle", starix));
         range r = star_to_particle_range[starix];
         return particlepos(r.start);
+    }
+    
+    public bool star_corresponds_to_particle(int starix) {
+        if(starix < 0 || starix >= GameDad.manystars.nstars())
+            throw new Exception(String.Format("there is no star with index {0}", starix));
+        return star_to_particle_range.ContainsKey(starix);
     }
     
     public void update_green(int index) {

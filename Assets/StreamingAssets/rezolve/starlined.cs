@@ -145,7 +145,8 @@ public class starlined: Rezolve
             GameDad.selectedStar == -1?
                 reticle.transform.position:
                 GameDad.selectedStarLocation;
-        make_line_red(l, too_far(newposition - oldposition)); // test
+        bool stillgreen = GameDad.get_green(pressed_star).type == greenstar.Type.Green;
+        make_line_red(l, !stillgreen || too_far(newposition - oldposition)); // test
         Vector3[] positions = new Vector3[] {
             0.9f * oldposition + 0.1f * newposition,
             0.2f * oldposition + 0.8f * newposition

@@ -35,6 +35,8 @@ public class GameDad {
     
     public static Func<Vector3, Vector3> realvector_to_spacevector = null;
     
+    public static Func<int, bool> star_corresponds_to_particle = null;
+    
     public static Action<StarInstantiatorMode> setmode = null;
     public static Action<int, greenstar> add_green = null;
     public static Action<int> remove_green = null;

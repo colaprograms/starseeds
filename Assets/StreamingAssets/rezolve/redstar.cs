@@ -2,18 +2,51 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+public class redstar_organizer {
+    public SortedDictionary<float, int> candidates;
+    public Vector3 vector;
+    public Vector3 loc;
+    
+    public redstar_organizer(int star, Vector3 _vector) {
+        candidates = new SortedDictionary<float, int>();
+        starmap sm = GameDad.manystars;
+        loc = sm.getstar(star).vec;
+        vector = _vector;
+        foreach(var ix in sm.stars_near_vec(loc, 4f)) {
+            if(ix == star)
+                continue;
+            star s = sm.getstar(ix);
+            candidates[starscore(s)] = ix;
+        }
+    }
+    
+    float starscore(star s) {
+        Vector3 v = s.vec - loc;
+        v /= v.magnitude;
+        return -Vector3.Dot(v, vector);
+    }
+    
+    public int[] array() {
+        return candidates.Values.ToArray();
+    }
+}
+
 public class redstardata {
     public greenstar star;
     public int ix;
+    public bool has_a_launcher = false;
     public float launch_clock = 0f;
     public float die_clock = 0f;
     public Vector3 vector;
-    public const float DIE_SPEED = 30f;
+    public const float DIE_SPEED = 60f; // seconds
+    public int[] candidates;
+    int current_candidate = 0;
     
     public redstardata(int _ix, greenstar _star, Vector3 _vecto) {
         ix = _ix;
         star = _star;
         vector = _vecto;
+        candidates = (new redstar_organizer(ix, vector)).array();
     }
     
     public void flip() {
@@ -23,10 +56,35 @@ public class redstardata {
     
     public void update()
     {
-        launch_clock += Time.deltaTime;
+        if(has_a_launcher) {
+            launch_clock += Time.deltaTime;
+            if(launch_clock > 2f) {
+                launch_clock -= 2f;
+                launch();
+            }
+        }
         if(redstar.exponential_decay(1/DIE_SPEED)) {
             GameDad.red_star_evaporate(ix);
             return;
+        }
+    }
+    
+    public void launch() {
+        bool stop = false;
+        while(0 <= current_candidate && current_candidate < candidates.Length && !stop) {
+            if(GameDad.star_corresponds_to_particle(candidates[current_candidate])) {
+                GameDad.send_red_hook(ix, candidates[current_candidate]);
+                stop = true;
+            }
+            current_candidate++;
+        }
+        if(!stop) {
+            if(candidates.Length > 0) {
+                int r = UnityEngine.Random.Range(0, candidates.Length);
+                if(GameDad.star_corresponds_to_particle(candidates[r])) {
+                    GameDad.send_red_hook(ix, candidates[r]);
+                }
+            }
         }
     }
 }
@@ -60,9 +118,11 @@ public class redstar: Rezolve // test
         return r;
     }
     
-    public void gamedad_make_red(int ix, Vector3 vector)
+    public void gamedad_make_red(int ix, Vector3 vector, bool has_a_launcher)
     {
         red_stars[ix] = make_new_red_star(ix, vector);
+        if(has_a_launcher)
+            red_stars[ix].has_a_launcher = true;
         GameDad.add_green(ix, red_stars[ix].star);
     }
     
@@ -82,7 +142,7 @@ public class redstar: Rezolve // test
         if(UnityEngine.Random.value > 0.1)
             return false;
         Debug.Log("trying red star");
-        gamedad_make_red(end, startLocation - endLocation);
+        gamedad_make_red(end, startLocation - endLocation, false);
         if(GameDad.send_red_hook != null)
             GameDad.send_red_hook(end, start);
         return true;
@@ -91,7 +151,7 @@ public class redstar: Rezolve // test
     public void spamseed_lands_on_star(int ix, Vector3 vector) {
         if(GameDad.is_green(ix) && GameDad.get_green(ix).type == greenstar.Type.Green) {
             GameDad.remove_green(ix);
-            gamedad_make_red(ix, vector);
+            gamedad_make_red(ix, vector, true);
         }
     }
     
