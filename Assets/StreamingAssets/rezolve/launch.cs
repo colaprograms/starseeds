@@ -121,18 +121,28 @@ public class launch: Rezolve
         GameObject starseed = isred? RezFind("spamseed_icon"): RezFind("starseed_icon");
         Action whenhit = delegate() {
             if(!isred) {
+                // a green starseed has hit a star
+                
+                // check if the hooks we need even exist
                 if(GameDad.is_green == null || GameDad.get_green == null)
                     return;
+                
+                // if the destination star is bare, then:
+                // 1. call give_chance_to_make_red_star
+                // 2. if this is false, then make it green
                 if(!GameDad.is_green(end)) {
                     bool stop = false;
-                    if(GameDad.give_chance_to_make_red_star != null) 
+                    if(GameDad.give_chance_to_make_red_star != null)
                         stop = GameDad.give_chance_to_make_red_star(start, startLocation, end, endLocation);
-                    if(!stop && !GameDad.is_green(end)) {
+                    if(GameDad.is_green(end))
+                        stop = true;
+                    
+                    if(!stop)
                         GameDad.add_green(end, null);
-                    }
                 }
-                else if(GameDad.get_green(end).isred) {
-                    // the player made a mistake
+                else if(GameDad.get_green(end).type == greenstar.Type.Red) {
+                    // a green starseed has hit a red star.
+                    // send a red starseed back
                     if(GameDad.send_red_hook != null)
                         GameDad.send_red_hook(end, start);
                 }
@@ -143,8 +153,10 @@ public class launch: Rezolve
                 */
             }
             else {
-                if(GameDad.starseed_lands_on_star != null)
-                    GameDad.starseed_lands_on_star(end);
+                // a red starseed has hit a star
+                
+                if(GameDad.spamseed_lands_on_star != null)
+                    GameDad.spamseed_lands_on_star(end, endLocation - startLocation); // test
             }
         };
         starseeds[id++] = new starseed_owner(startLocation, endLocation, speed, starseed, whenhit, isred);

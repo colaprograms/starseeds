@@ -13,6 +13,7 @@ public class starlined: Rezolve
     int pressed_star = -1; // star that was selected when space was pressed, -1 if none
     Vector3 pressed_star_position; // position of that star in world space
     GameObject line = null; // line from that star to the currently selected star or reticle
+    bool line_currently_red = false;
     
     public override void start()
     {
@@ -41,6 +42,7 @@ public class starlined: Rezolve
                     pressed_star_position = GameDad.selectedStarLocation;
                     line = Rez(Find("line_template"));
                     line.SetActive(true);
+                    line_currently_red = false;
                     GameDad.setmode(StarInstantiatorMode.AnyStarSelect);
                 }
                 // If there is no selected star, we still set pressed to true,
@@ -55,10 +57,13 @@ public class starlined: Rezolve
                     // There is a line from a star.
                     if(GameDad.selectedStar != -1) {
                         // The line goes to another star.
-                        GameDad.linedrawn_hook(pressed_star,
-                                       pressed_star_position,
-                                       GameDad.selectedStar,
-                                       GameDad.selectedStarLocation);
+                        if(!too_far(pressed_star_position - GameDad.selectedStarLocation)) {
+                            // The line is not too long.
+                            GameDad.linedrawn_hook(pressed_star,
+                                           pressed_star_position,
+                                           GameDad.selectedStar,
+                                           GameDad.selectedStarLocation);
+                        }
                     }
                 }
                 else {
@@ -112,6 +117,23 @@ public class starlined: Rezolve
         tt.text = sb.ToString();
     }
     
+    bool too_far(Vector3 diff) {
+        return GameDad.realvector_to_spacevector(diff).magnitude > 4;
+    }
+    
+    void make_line_red(LineRenderer l, bool isred) {
+        if(!line_currently_red && isred) {
+            l.startColor = new Color(1f, 0f, 0f, 1f);
+            l.endColor = new Color(0.2f, 0f, 0f, 0.4f);
+            line_currently_red = true;
+        }
+        else if(line_currently_red && !isred) { // test
+            l.startColor = new Color(125f/255f, 1f, 0f, 1f);
+            l.endColor = new Color(20f/255f, 131f/255f, 11f/255f, 127/255f);
+            line_currently_red = false;
+        }
+    }
+    
     // Function to move the gameobject "line" (called from update)
     void updateline() {
         if(line == null)
@@ -123,6 +145,7 @@ public class starlined: Rezolve
             GameDad.selectedStar == -1?
                 reticle.transform.position:
                 GameDad.selectedStarLocation;
+        make_line_red(l, too_far(newposition - oldposition)); // test
         Vector3[] positions = new Vector3[] {
             0.9f * oldposition + 0.1f * newposition,
             0.2f * oldposition + 0.8f * newposition

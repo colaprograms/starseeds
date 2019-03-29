@@ -138,6 +138,18 @@ public class starmap {
             i++;
         }
     }
+    
+    public IEnumerable<int> stars_near_vec(Vector3 th, float dist)
+    {
+        int ns = nstars();
+        for(int j = 0; j < ns; j++) {
+            star s = getstar(j);
+            if(s.part_of_group)
+                continue;
+            if(Vector3.Distance(s.vec, th) < dist)
+                yield return j;
+        }
+    }
 }
 
 public class StarReader {

@@ -14,6 +14,12 @@ public static class GameDadExtensions {
                              what.y,
                              what.z);
     }
+    
+    public static T[] ToArray<T>(this ICollection<T> z) {
+        T[] a = new T[z.Count];
+        z.CopyTo(a, 0);
+        return a;
+    }
 };
 
 public class GameDad {
@@ -27,6 +33,8 @@ public class GameDad {
     public static Action<int, int> send_red_hook = null;
     public static Func<int, Vector3> whereisstar = null;
     
+    public static Func<Vector3, Vector3> realvector_to_spacevector = null;
+    
     public static Action<StarInstantiatorMode> setmode = null;
     public static Action<int, greenstar> add_green = null;
     public static Action<int> remove_green = null;
@@ -35,11 +43,16 @@ public class GameDad {
     public static Action<int> update_green = null;
     public static Func<int, greenstar> get_green = null;
     public static Func<int, Vector3, int, Vector3, bool> give_chance_to_make_red_star = null;
-    public static Action<int> starseed_lands_on_star = null;
+    public static Action<int, Vector3> spamseed_lands_on_star = null;
+    public static Action<int> red_star_evaporate = null;
 }
 
 public class greenstar {
-    public bool isred = false;
+    public enum Type {
+        Green, Red, Quiet
+    };
+    
+    public Type type = Type.Green;
     
     public float size = 0.02f; // for red stars
 }

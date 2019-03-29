@@ -57,7 +57,6 @@ public class starinstantiator : Rezolve
     float time = 0;
     
     bool started = false;
-    const float SPACE_SCALE = 0.2f / 18;
     
     public override void start()
     {
@@ -75,11 +74,19 @@ public class starinstantiator : Rezolve
             return which_stars_are_green[i];
         };
         GameDad.whereisstar = whereisstar;
-        GameDad.realvector_to_spacevector = realvector_to_spacevector;
     }
     
     void setmode(StarInstantiatorMode _mode) {
         mode = _mode;
+        if(GameDadExtensions.nearstarmode(mode)) {
+            Debug.Log("reconstructing selectablestarlist");
+            List<int> stars = new List<int>();
+            foreach(var ix in stars_visible_from(GameDad.selectedStarLocation))
+                stars.Add(ix);
+            GameDad.selectableStarList = stars.ToArray();
+        }
+        else
+            GameDad.selectableStarList = null;
     }
     
     void setparticles()
@@ -232,6 +239,26 @@ public class starinstantiator : Rezolve
         }
     }
     
+    IEnumerable<int> selectable() {
+        if(GameDad.selectableStarList != null) {
+            foreach(var ix in GameDad.selectableStarList) {
+                if(star_to_particle_range.ContainsKey(ix))
+                    yield return star_to_particle_range[ix].start;
+            }
+        }
+    }
+    
+    IEnumerable<int> nongreen_selectable() {
+        if(GameDad.selectableStarList != null) {
+            foreach(var ix in GameDad.selectableStarList) {
+                if(check_if_green(ix))
+                    continue;
+                yield return star_to_particle_range[ix].start;
+            }
+        }
+    }
+                
+    
     int closest_valid_star_particle(bool must_have_starseed_launcher = false) {
         Vector3 reticle_posn = get_inv_reticle_posn();
         IEnumerable<int> indices;
@@ -247,6 +274,12 @@ public class starinstantiator : Rezolve
                 break;
             case StarInstantiatorMode.NoSelect:
                 indices = inrange(0, 0);
+                break;
+            case StarInstantiatorMode.NearStarSelect:
+                indices = selectable();
+                break;
+            case StarInstantiatorMode.NonGreenNearStarSelect:
+                indices = nongreen_selectable();
                 break;
             default:
                 throw new Exception("no such mode");
@@ -268,7 +301,7 @@ public class starinstantiator : Rezolve
         double T = 4600 * (1 / (0.92 * st.ci + 1.7) + 1/(0.92 * st.ci + 0.62));
         Color temp = Mathf.CorrelatedColorTemperatureToRGB((float) T);
         return new ParticleSystem.Particle {
-            position = SPACE_SCALE * st.vec,
+            position = 0.2f / 18 * st.vec,
             startLifetime = Mathf.Infinity,
             startSize = Mathf.Max(st.part_of_group? 0.001f: 0.003f, 0.02f * lum), //startSize = Mathf.Max(0.002f, 0.004f * Mathf.Sqrt(star.radius)),
             startColor = temp
@@ -299,7 +332,7 @@ public class starinstantiator : Rezolve
         }
     }
     
-    IEnumerable<int> stars_visible_from(Vector3 th)
+    public IEnumerable<int> stars_visible_from(Vector3 th)
     {
         return GameDad.manystars.stars_near_vec(th, 4);
         
@@ -330,10 +363,6 @@ public class starinstantiator : Rezolve
     
     public Vector3 particlepos(int index) {
         return instantiated.transform.TransformPoint(particles[index].position);
-    }
-    
-    public Vector3 realvector_to_spacevector(Vector3 vector) {
-        return instantiated.transform.InverseTransformVector(vector) / SPACE_SCALE;
     }
     
     public Vector3 whereisstar(int starix) {
