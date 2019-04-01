@@ -50,6 +50,8 @@ public class redstardata {
     }
     
     public void flip() {
+        if(ix == GameDad.sol_index)
+            return; // this is handled by earthblinks
         star.size = 0.036f - star.size;
         GameDad.update_green(ix);
     }
@@ -72,18 +74,21 @@ public class redstardata {
     public void launch() {
         bool stop = false;
         while(0 <= current_candidate && current_candidate < candidates.Length && !stop) {
-            if(GameDad.star_corresponds_to_particle(candidates[current_candidate])) {
-                GameDad.send_red_hook(ix, candidates[current_candidate]);
-                stop = true;
-            }
+//            if(GameDad.star_corresponds_to_particle(candidates[current_candidate])) {
+//                GameDad.send_red_hook(ix, candidates[current_candidate]);
+//                stop = true;
+//            }
+            GameDad.send_red_hook(ix, candidates[current_candidate]);
+            stop = true;
             current_candidate++;
         }
         if(!stop) {
             if(candidates.Length > 0) {
                 int r = UnityEngine.Random.Range(0, candidates.Length);
-                if(GameDad.star_corresponds_to_particle(candidates[r])) {
-                    GameDad.send_red_hook(ix, candidates[r]);
-                }
+                GameDad.send_red_hook(ix, candidates[r]);
+//                if(GameDad.star_corresponds_to_particle(candidates[r])) {
+//                    GameDad.send_red_hook(ix, candidates[r]);
+//                }
             }
         }
     }
@@ -138,13 +143,16 @@ public class redstar: Rezolve // test
             return false;
         if(quiet_stars.ContainsKey(end))
             return false; // star is quiet QUIET_DURATION seconds after spambots die
-        Debug.Log("making red star maybe");
-        if(UnityEngine.Random.value > 0.1)
+        float r = UnityEngine.Random.value;
+        if(r > 0.1) {
+            Debug.Log(String.Format("{0} > 0.1, not making red star", r));
             return false;
-        Debug.Log("trying red star");
-        gamedad_make_red(end, startLocation - endLocation, false);
-        if(GameDad.send_red_hook != null)
-            GameDad.send_red_hook(end, start);
+        }
+        Debug.Log(String.Format("{0} <= 0.1, making red star", r));
+        //Debug.Log("trying red star");
+        gamedad_make_red(end, startLocation - endLocation, true); // test
+        //if(GameDad.send_red_hook != null)
+        //    GameDad.send_red_hook(end, start);
         return true;
     }
     

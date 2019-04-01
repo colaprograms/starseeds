@@ -140,7 +140,7 @@ public class launch: Rezolve
                     if(!stop)
                         GameDad.add_green(end, null);
                 }
-                else if(GameDad.get_green(end).type == greenstar.Type.Red) {
+                else if(GameDad.get_green(end).type == greenstar.Type.Red) { // test
                     // a green starseed has hit a red star.
                     // send a red starseed back
                     if(GameDad.send_red_hook != null)

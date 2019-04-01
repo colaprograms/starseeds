@@ -5,6 +5,11 @@ using UnityEngine;
 public class annulus_generator : ProgrammableMesh {
     public int vertexCount;
     public float outRadius, inRadius, height;
+    public string mesh_name = "anonymous annulus";
+    
+    override public string meshname() {
+        return mesh_name;
+    }
     
     override public void CreateMesh() {
         initialize(vertexCount * 4);

@@ -71,7 +71,7 @@ public class starinstantiator : Rezolve
         GameDad.is_green = delegate(int i) {
             return which_stars_are_green.ContainsKey(i);
         };
-        GameDad.get_green = delegate(int i) { // test
+        GameDad.get_green = delegate(int i) {
             return which_stars_are_green[i];
         };
         GameDad.whereisstar = whereisstar;
@@ -115,8 +115,8 @@ public class starinstantiator : Rezolve
         else {
             if(star == null)
                 star = new greenstar();
-            Debug.Log("running");
-            Debug.Log(star);
+            //Debug.Log("running");
+            //Debug.Log(star);
             range r = star_to_particle_range[i];
             bool large_star = false;
             bool reveal_neighbourhood = false;
@@ -269,7 +269,7 @@ public class starinstantiator : Rezolve
         double T = 4600 * (1 / (0.92 * st.ci + 1.7) + 1/(0.92 * st.ci + 0.62));
         Color temp = Mathf.CorrelatedColorTemperatureToRGB((float) T);
         return new ParticleSystem.Particle {
-            position = SPACE_SCALE * st.vec,
+            position = star_to_position_in_particle_reference_frame(st),
             startLifetime = Mathf.Infinity,
             startSize = Mathf.Max(st.part_of_group? 0.001f: 0.003f, 0.02f * lum), //startSize = Mathf.Max(0.002f, 0.004f * Mathf.Sqrt(star.radius)),
             startColor = temp
@@ -329,7 +329,13 @@ public class starinstantiator : Rezolve
         }
     }
     
+    /* There are three different position things here:
+     * 1. The positions in the star database (in parsecs), st.vec
+     * 2. The positions in the particle system frame, particles[index].position or st.vec * SPACE_SCALE
+     * 3. The position in the world frame, instantiated.transform.TransformPoint(particles[index].position) */
+    
     public Vector3 particlepos(int index) {
+        // particle position in the world frame
         return instantiated.transform.TransformPoint(particles[index].position);
     }
     
@@ -337,10 +343,17 @@ public class starinstantiator : Rezolve
         return instantiated.transform.InverseTransformVector(vector) / SPACE_SCALE;
     }
     
+    public Vector3 star_to_position_in_particle_reference_frame(star st) {
+        return SPACE_SCALE * st.vec;
+    }
+    
     public Vector3 whereisstar(int starix) {
         //throw new Exception(String.Format("there is no star with index {0}", starix));
-        if(!star_corresponds_to_particle(starix))
-            throw new Exception(String.Format("star {0} does not correspond to a particle", starix));
+        if(!star_corresponds_to_particle(starix)) {
+            return instantiated.transform.TransformPoint(
+                star_to_position_in_particle_reference_frame(GameDad.manystars.getstar(starix))); // test
+//            throw new Exception(String.Format("star {0} does not correspond to a particle", starix));
+        }
         range r = star_to_particle_range[starix];
         return particlepos(r.start);
     }
@@ -353,7 +366,7 @@ public class starinstantiator : Rezolve
     
     public void update_green(int index) {
         greenstar star = which_stars_are_green[index];
-        if(star.type == greenstar.Type.Red) {
+        if(!float.IsNaN(star.size)) {
             range s = star_to_particle_range[index];
             particles[s.start].startSize = star.size;
             setparticles_later = true;
@@ -377,9 +390,10 @@ public class starinstantiator : Rezolve
             
             allocate_particle_for_star(0);
             add_green(0, null);
+            GameDad.sol_index = 0;
             foreach(var starix in stars_visible_from(new Vector3(0, 0, 0))) {
                 allocate_particle_for_star(starix);
-                Debug.Log(String.Format("allocated {0}", starix));
+                //Debug.Log(String.Format("allocated {0}", starix));
             }
             setparticles_later = true;
             Debug.Log(System.String.Format("{0} stars", nvalidparticle));

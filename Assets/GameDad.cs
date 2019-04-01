@@ -28,6 +28,8 @@ public class GameDad {
     public static starmap manystars;
     public static int starprogress = 0;
     
+    public static int sol_index = -1;
+    
     public static Action<int, Vector3> starmouseover_hook = null;
     public static Action<int, Vector3, int, Vector3> linedrawn_hook = null;
     public static Action<int, int> send_red_hook = null;
@@ -47,6 +49,8 @@ public class GameDad {
     public static Func<int, Vector3, int, Vector3, bool> give_chance_to_make_red_star = null;
     public static Action<int, Vector3> spamseed_lands_on_star = null;
     public static Action<int> red_star_evaporate = null;
+    
+    public static Material shiny_red, shiny_green, shiny_black;
 }
 
 public class greenstar {
@@ -56,5 +60,5 @@ public class greenstar {
     
     public Type type = Type.Green;
     
-    public float size = 0.02f; // for red stars
+    public float size = float.NaN;
 }

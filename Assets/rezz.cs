@@ -36,7 +36,7 @@ public class RezFactory {
         if(registered.ContainsKey(newObject))
             throw new System.Exception("the dictionary is broken");
         registered[newObject] = true;
-        Debug.Log(String.Format("creating {0}", newObject));
+        //Debug.Log(String.Format("creating {0}", newObject));
         return newObject;
     }
     public void DeRez(GameObject obj)
@@ -44,7 +44,7 @@ public class RezFactory {
         if(!registered.ContainsKey(obj))
             throw new System.Exception("cannot derez: object was never rezed");
         registered.Remove(obj);
-        Debug.Log(String.Format("destroying {0}", obj));
+        //Debug.Log(String.Format("destroying {0}", obj));
         UnityEngine.Object.Destroy(obj);
     }
     /*
@@ -69,7 +69,7 @@ public class RezFactory {
             return;
         }
         foreach(KeyValuePair<GameObject, bool> badObject in registered) {
-            Debug.Log(String.Format("destroying {0}", badObject.Key));
+            //Debug.Log(String.Format("destroying {0}", badObject.Key));
             UnityEngine.Object.Destroy(badObject.Key);
         }
         registered = null;

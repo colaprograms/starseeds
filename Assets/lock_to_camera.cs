@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class lock_to_camera : MonoBehaviour {
     public GameObject cam;
-    float dist = 0.3f;
+    float dist = 0.2f;
 
 	// Use this for initialization
 	void Start () {
