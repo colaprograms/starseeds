@@ -50,6 +50,9 @@ public class GameDad {
     public static Action<int, Vector3> spamseed_lands_on_star = null;
     public static Action<int> red_star_evaporate = null;
     
+    public static Action update_best = null;
+    public static Func<float> farthest_green_star = null;
+    
     public static Material shiny_red, shiny_green, shiny_black;
 }
 

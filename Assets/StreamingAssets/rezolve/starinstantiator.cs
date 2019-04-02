@@ -77,6 +77,7 @@ public class starinstantiator : Rezolve
         GameDad.whereisstar = whereisstar;
         GameDad.realvector_to_spacevector = realvector_to_spacevector;
         GameDad.star_corresponds_to_particle = star_corresponds_to_particle;
+        GameDad.farthest_green_star = farthest_green_star;
     }
     
     void setmode(StarInstantiatorMode _mode) {
@@ -371,6 +372,20 @@ public class starinstantiator : Rezolve
             particles[s.start].startSize = star.size;
             setparticles_later = true;
         }
+    }
+    
+    public float farthest_green_star() {
+        float cur = 0;
+        if(GameDad.manystars == null)
+            return 0f;
+        foreach(var ix in which_stars_are_green.Keys) {
+            if(which_stars_are_green[ix].type != greenstar.Type.Green)
+                continue;
+            float m = GameDad.manystars.getstar(ix).vec.magnitude;
+            if(cur < m)
+                cur = m;
+        }
+        return cur;
     }
     
     // Update is called once per frame

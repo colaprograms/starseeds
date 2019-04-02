@@ -122,8 +122,11 @@ class test: Rezolve {
     }
     
     public override void update() {
-        time += Time.deltaTime;
-        Find("launcher_model").transform.rotation = Quaternion.AngleAxis(30*time, Vector3.up) * Quaternion.AngleAxis(90, Vector3.left);
+        //if(GameDad.selectedStar != -1) {
+        //    Debug.Log(GameDad.manystars.getstar(GameDad.selectedStar).vec.ToLongString());
+        //}
+        //time += Time.deltaTime;
+        //Find("launcher_model").transform.rotation = Quaternion.AngleAxis(30*time, Vector3.up) * Quaternion.AngleAxis(90, Vector3.left);
         //time += Time.deltaTime;
         //sphere.transform.position = new Vector3(0.02f * (float) Math.Sin(time),
         //    -1.2f + 0.02f * (float) Math.Cos(time), 0.4f);

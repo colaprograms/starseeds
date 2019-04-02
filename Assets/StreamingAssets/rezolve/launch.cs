@@ -137,8 +137,10 @@ public class launch: Rezolve
                     if(GameDad.is_green(end))
                         stop = true;
                     
-                    if(!stop)
+                    if(!stop) {
                         GameDad.add_green(end, null);
+                        if(GameDad.update_best != null) GameDad.update_best();
+                    }
                 }
                 else if(GameDad.get_green(end).type == greenstar.Type.Red) { // test
                     // a green starseed has hit a red star.
@@ -155,8 +157,10 @@ public class launch: Rezolve
             else {
                 // a red starseed has hit a star
                 
-                if(GameDad.spamseed_lands_on_star != null)
+                if(GameDad.spamseed_lands_on_star != null) {
                     GameDad.spamseed_lands_on_star(end, endLocation - startLocation); // test
+                    if(GameDad.update_best != null) GameDad.update_best();
+                }
             }
         };
         starseeds[id++] = new starseed_owner(startLocation, endLocation, speed, starseed, whenhit, isred);
