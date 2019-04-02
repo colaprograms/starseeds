@@ -375,7 +375,7 @@ public class starinstantiator : Rezolve
     }
     
     public float farthest_green_star() {
-        float cur = 0;
+        float cur = -1f;
         if(GameDad.manystars == null)
             return 0f;
         foreach(var ix in which_stars_are_green.Keys) {

@@ -7,7 +7,7 @@ class best: Rezolve {
     GameObject curdistance;
     GameObject maxdistance;
     float cur = 0f, max = 0f, lagcur = 0f, lagmax = 0f, SPEED = 3f;
-    bool max_is_on = false;
+    bool max_is_on = false, died = false;
     
     public override void start() {
         curdistance = GameObject.Find("curdistance");
@@ -23,6 +23,12 @@ class best: Rezolve {
             max = cur;
         if(cur < max)
             max_is_on = true;
+        if(cur == -1) {
+            died = true;
+            var t = curdistance.GetComponent<Text>();
+            t.color = new Color(0f, 0.92f, 0f, 1f);
+            t.text = String.Format("NO REMAINING\n STARS", lagcur);
+        }
     }
     
     public float lag(float x, float l) {
@@ -43,10 +49,12 @@ class best: Rezolve {
     }
     
     public override void update() {
+        if(died)
+            return;
         if(cur != lagcur || max != lagmax) {
             lagcur = lag(cur, lagcur);
             lagmax = lag(max, lagmax);
-            curdistance.GetComponent<Text>().text = String.Format("{0:00.00} PC", lagcur);
+            curdistance.GetComponent<Text>().text = String.Format("CURRENT DISTANCE\n{0:00.00} PC", lagcur);
             maxdistance.GetComponent<Text>().text = max_is_on? String.Format("MAXIMUM DISTANCE\n{0:00.00} PC", lagmax): "";
         }
     }
