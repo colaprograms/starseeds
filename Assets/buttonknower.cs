@@ -7,7 +7,7 @@ namespace Meta.Buttons {
     public class buttonknower : BaseMetaButtonInteractionObject {
         bool button_pushed = false;
         
-        public void Start()
+        private void Awake()
         {
             GameDad.headset_button_is_pushed = headset_button_is_pushed;
         }
@@ -18,7 +18,6 @@ namespace Meta.Buttons {
         
         public override void OnMetaButtonEvent(MetaButton button)
         {
-            Debug.Log(button);
             if(button.State == ButtonState.ButtonRelease)
                 button_pushed = false;
             else if(button.State == ButtonState.ButtonShortPress || button.State == ButtonState.ButtonLongPress)

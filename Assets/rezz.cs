@@ -449,4 +449,14 @@ public class rezz : MonoBehaviour
         }
         rezolve[name] = rez;
     }
+    
+    public void reboot()
+    {
+        string[] names = rezolve.Keys.ToArray();
+        foreach(var s in names) {
+            rezolve[s].destroy();
+            rezolve[s].update();
+        }
+        reload();
+    }
 }

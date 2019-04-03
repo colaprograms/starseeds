@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+<style type="text/css">
+    div.image { text-align: center; }
+    body {
+        background-color: #000;
+        color: #0F0;
+        font-family: Comfortaa;
+    }
+    @font-face {
+        font-family: 'Comfortaa';
+        src: url('images/Comfortaa-Bold.ttf') format('truetype');
+    }
+    div.header {
+        margin-top: 4em;
+        color: #0F0;
+        text-align: center;
+        font-size: 200%;
+        animation: flicker 2s infinite;
+    }
+    @keyframes flicker {
+        0% { color: #0F0; }
+        10% { color: #0F0; }
+        11% { color: #080; }
+        12% { color: #090; }
+        40% { color: #090; }
+        41% { color: #0F0; }
+        90% { color: #0F0; }
+        91% { color: #090; }
+        99% { color: #090; }
+        100% { color: #0F0; }
+    }
+    div.text {
+        font-size: 150%;
+        text-align: center;
+        align-self: center;
+    }
+    div.widetexts {
+        font-size: 150%;
+        align-self: center;
+        grid-column: 1/3;
+    }
+    div.row {
+        display: grid;
+        grid-column-gap: 1em;
+        grid-template-columns: 40% 60%;
+        max-width: 1200px;
+        margin: auto;
+    }
+    p.indents {
+        padding-left: 4em;
+    }
+    a {
+        color: #090;
+    }
+    a:hover {
+        color: #0E0;
+    }
+    
+    a:visited {
+        color: #070;
+    }   
+</style>
+</head>
+<body>
+    <div class="header">How to play Starseeds</div>
+    
+    <div class="row">
+        <div class="image">
+            <img src="images/01-earth.jpg">
+        </div>
+        <div class="text">
+            <p>This is the star which you occupy at the start of the game.</p>
+            
+            <p>For historical reasons, it is named <b>Earth.</b></p>
+        </div>
+        
+        <div class="image">
+            <img src="images/02-chevron.jpg">
+        </div>
+        <div class="text">
+            <p>This is the chevron.</p>
+            
+            <p>You can use it to select Earth.</p>
+        </div>
+        
+        <div class="widetexts" style="padding: 4em 0px 4em 0px;">
+            <p>If you are wearing the headset:</p>
+            <p class="indents">The chevron is stuck to your head, and you move it by moving your head.</p>
+            
+            <p>If you're playing on a monitor:</p>
+            <p class="indents">Use the WASD keys to move horizontally.
+            </p>
+            <p class="indents">Shift moves you up, and Control moves you down.</p>
+            <p class="indents">You can also move the chevron with the mouse and mouse wheel.<p>
+        </div>
+        
+        <div class="image">
+            <img src="images/02a-selected.jpg">
+        </div>
+        <div class="text">
+            <p>Good job.</p>
+            
+            <p>Now Earth is selected.</p>
+        </div>
+        
+        <div class="image">
+            <img src="images/02b-drag.jpg">
+        </div>
+        <div class="text">
+            <p>You can go to space using the <b>space bar</b>.</p>
+            <p>Hold down the Space key while Earth is selected.</p>
+            
+            <p>Then, move the chevron to another star.</p>
+            
+            <p>This selects the new star.</p>
+        </div>
+        
+        <div class="widetexts">
+            
+            <p>Instead of the space bar, you can also hold down the <b>camera button</b>
+               or either of the <b>volume buttons</b>. These are all on the right side of the headset.</p>
+            
+            <div style="font-size: 60%;">
+            <p>Important note if you're using the headset:</p>
+            <p class="indents">Make sure to hold the button down for a little while before you let it go! When you tap the button quickly, it will <b>get stuck</b> in software. If this happens, then push it again for a little longer to release it. (I think this is a bug in the API.)</p>
+            </div>
+        </div>
+        
+        <div class="image">
+            <img src="images/02c-launched.jpg">
+        </div>
+        <div class="text">
+            <p>Let go of the Space bar.</p>
+            
+            <p>A small green dot is launched.</p>
+            
+            <p>This is a <b>starseed</b>.</p>
+            
+            <p>It weighs 200 kilograms<br>and travels at 30,000 km/s.<br>Travel time to this star is<br>roughly 114 years.</p>
+        </div>
+        
+        <div class="image">
+            <img src="images/02d-green.jpg">
+        </div>
+        <div class="text">
+            <p>Whew! That was a long 114 years.</p>
+            
+            <p>Now there is another green star,<br>and <b>more stars have been revealed</b><br>in its neighbourhood.</p>
+            
+            <p>You can select the new green star<br> with the chevron, too, just like Earth.</p>
+            
+            <p>Try launching another green dot!</p>
+        </div>
+        
+        <div class="widetexts" style="text-align: center;">
+            <p>Each green star can launch starseeds<br>to any star <b>within 4 parsecs</b>.</p>
+            <p>If you're out of range, the line will turn red.</p>
+            <p>Try to get as far away<br> from Earth as you can!</p>
+            
+            <p>The farther you can get, the higher your score.</p>
+        </div>
+        
+        <div class="widetexts" style="padding-bottom: 12em;">
+        </div>
+        
+        <div class="image">
+            <img src="images/03-line.jpg">
+        </div>
+        <div class="text">
+            <p>Have fun in space.</p>
+        </div>
+        
+        <div class="widetexts" style="padding-bottom: 12em;">
+        </div>
+        
+        <div class="widetexts" style="padding-bottom: 24em; text-align: center;">
+            <p><b>Note:</b> The positions of the stars are taken<br> from a real stellar database,
+            the <A HREF="https://github.com/astronexus/HYG-Database">HYG Star Database</A>.</p>
+            
+            <p>This is neat, but it also affects the gameplay:</p>
+            
+            <p><b>There are fewer stars in the database<br> when you are farther away from Earth.</b></p>
+            
+            <p>So, when you are far away from Earth,<br>it's harder to find stars that are in range,<br> and there are many dead ends.</p>
+            
+            <p>Watch out!</p>
+            
+            <p>This is the only thing to watch out for.<br>Everything else in space is fine.</p>
+        </div>
+        
+        <div class="widetexts" style="text-align: center; font-size: 100%;">
+            Written by Hannah Cairns in 2019. <A HREF="mailto:hannah.abigail.cairns@gmail.com">Email.</A>
+            <A HREF="https://skeletonplanet.com">Skeleton Planet.<A>
+        </div>
+        <div style="padding-bottom: 4em;">
+        </div>
+    </div>
+</body>
+</html>
