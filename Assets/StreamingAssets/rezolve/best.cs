@@ -23,18 +23,23 @@ class best: Rezolve {
     
     public void update_best() {
         cur = GameDad.farthest_green_star();
+        if(cur == -1) {
+            if(GameDad.are_there_green_starseeds != null && !GameDad.are_there_green_starseeds()) {
+                died = true;
+                //var t = curdistance.GetComponent<Text>();
+                var t = curdistance.GetComponent<TextMesh>();
+                var m = maxdistance.GetComponent<TextMesh>();
+                t.color = new Color(0f, 0.92f, 0f, 1f);
+                t.text = String.Format("GAME OVER");
+                m.text = String.Format("BEST MAX {0:00.00}", max);
+                return;
+            }
+            else
+                cur = 0f;
+        }
         if(cur > max)
             max = cur;
         max_is_on = cur < max;
-        if(cur == -1) {
-            died = true;
-            //var t = curdistance.GetComponent<Text>();
-            var t = curdistance.GetComponent<TextMesh>();
-            var m = maxdistance.GetComponent<TextMesh>();
-            t.color = new Color(0f, 0.92f, 0f, 1f);
-            t.text = String.Format("GAME OVER");
-            m.text = String.Format("BEST MAX {0:00.00}", max);
-        }
     }
     
     public float lag(float x, float l) {

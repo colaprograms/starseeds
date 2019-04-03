@@ -127,7 +127,7 @@ public class starlined: Rezolve
             // and linedrawn_hook should come from launch
             return;
         }
-        if(Input.GetKey("space")) {
+        if(Input.GetKey("space") || (GameDad.headset_button_is_pushed != null && GameDad.headset_button_is_pushed())) {
             if(pressed == false) {
                 pressed = true;
                 if(line != null)

@@ -52,6 +52,8 @@ public class GameDad {
     
     public static Action update_best = null;
     public static Func<float> farthest_green_star = null;
+    public static Func<bool> headset_button_is_pushed = null;
+    public static Func<bool> are_there_green_starseeds = null;
     
     public static Material shiny_red, shiny_green, shiny_black;
 }

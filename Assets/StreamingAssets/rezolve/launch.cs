@@ -15,7 +15,7 @@ public class starseed_owner
     const float PERIOD = 0.6f;
     bool must_delete_material = false;
     float[] pattern = { 1f, 0.8f, 0.6f, 0.4f, 0.4f, 0.4f, 0.4f, 0.4f };
-    bool isred = false;
+    public bool isred = false;
     
     public starseed_owner(Vector3 _startLocation, Vector3 _endLocation, float _speed, GameObject _ob, Action _callback, bool _isred)
     {
@@ -88,6 +88,7 @@ public class launch: Rezolve
     {
         GameDad.linedrawn_hook = linedrawn;
         GameDad.send_red_hook = send_red;
+        GameDad.are_there_green_starseeds = are_there_green_starseeds;
         starseeds = new Dictionary<int, starseed_owner>();
     }
     
@@ -114,6 +115,16 @@ public class launch: Rezolve
         Vector3 startLocation = GameDad.whereisstar(start);
         Vector3 endLocation = GameDad.whereisstar(end);
         make_starseed(start, startLocation, end, endLocation, 0.01f, true);
+    }
+    
+    public bool are_there_green_starseeds()
+    {
+        bool there_are_green_starseeds = false;
+        foreach(var seed in starseeds.Values) {
+            if(!seed.isred)
+                there_are_green_starseeds = true;
+        }
+        return there_are_green_starseeds;
     }
     
     public void make_starseed(int start, Vector3 startLocation, int end, Vector3 endLocation, float speed, bool isred = false)
