@@ -10,24 +10,30 @@ class best: Rezolve {
     bool max_is_on = false, died = false;
     
     public override void start() {
-        curdistance = GameObject.Find("curdistance");
-        maxdistance = GameObject.Find("maxdistance");
+        //curdistance = GameObject.Find("curdistance");
+        //maxdistance = GameObject.Find("maxdistance");
+        curdistance = GameObject.Find("curdistance_1");
+        maxdistance = GameObject.Find("maxdistance_1");
         GameDad.update_best = update_best;
-        curdistance.GetComponent<Text>().text = String.Format("", cur);
-        maxdistance.GetComponent<Text>().text = "";
+        //curdistance.GetComponent<Text>().text = String.Format("", cur);
+        //maxdistance.GetComponent<Text>().text = "";
+        curdistance.GetComponent<TextMesh>().text = String.Format("", cur);
+        maxdistance.GetComponent<TextMesh>().text = "";
     }
     
     public void update_best() {
         cur = GameDad.farthest_green_star();
         if(cur > max)
             max = cur;
-        if(cur < max)
-            max_is_on = true;
+        max_is_on = cur < max;
         if(cur == -1) {
             died = true;
-            var t = curdistance.GetComponent<Text>();
+            //var t = curdistance.GetComponent<Text>();
+            var t = curdistance.GetComponent<TextMesh>();
+            var m = maxdistance.GetComponent<TextMesh>();
             t.color = new Color(0f, 0.92f, 0f, 1f);
-            t.text = String.Format("NO REMAINING\n STARS", lagcur);
+            t.text = String.Format("GAME OVER");
+            m.text = String.Format("BEST MAX {0:00.00}", max);
         }
     }
     
@@ -54,8 +60,10 @@ class best: Rezolve {
         if(cur != lagcur || max != lagmax) {
             lagcur = lag(cur, lagcur);
             lagmax = lag(max, lagmax);
-            curdistance.GetComponent<Text>().text = String.Format("CURRENT DISTANCE\n{0:00.00} PC", lagcur);
-            maxdistance.GetComponent<Text>().text = max_is_on? String.Format("MAXIMUM DISTANCE\n{0:00.00} PC", lagmax): "";
+            curdistance.GetComponent<TextMesh>().text = String.Format("CURRENT MAX {0:00.00}", lagcur);
+            maxdistance.GetComponent<TextMesh>().text = max_is_on? String.Format("BEST MAX {0:00.00}", lagmax): "";
+            //curdistance.GetComponent<Text>().text = String.Format("CURRENT DISTANCE\n{0:00.00} PC", lagcur);
+            //maxdistance.GetComponent<Text>().text = max_is_on? String.Format("MAXIMUM DISTANCE\n{0:00.00} PC", lagmax): "";
         }
     }
 }

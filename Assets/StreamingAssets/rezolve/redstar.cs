@@ -52,6 +52,8 @@ public class redstardata {
     public void flip() {
         if(ix == GameDad.sol_index)
             return; // this is handled by earthblinks
+        if(!GameDad.is_green(ix))
+            throw new Exception("red star was not green??");
         star.size = 0.036f - star.size;
         GameDad.update_green(ix);
     }
