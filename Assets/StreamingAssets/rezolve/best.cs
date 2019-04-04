@@ -70,8 +70,8 @@ class best: Rezolve {
             return;
         if(time >= 0) {
             time += Time.deltaTime;
-            time_elapsed.GetComponent<TextMesh>().text = String.Format("TIME: {0:00}:{1:00}", Mathf.RoundToInt(time / 60),
-                                                                                              Mathf.RoundToInt(time) % 60);
+            time_elapsed.GetComponent<TextMesh>().text = String.Format("TIME: {0:00}:{1:00}", Mathf.FloorToInt(time / 60),
+                                                                                              Mathf.FloorToInt(time) % 60);
         }
         if(cur != lagcur || max != lagmax) {
             lagcur = lag(cur, lagcur);
