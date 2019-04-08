@@ -1,5 +1,5 @@
 using UnityEngine;
-using System;
+using System; // rar
 using System.Collections.Generic;
 
 // wraps a starseed gameobject and stuff
@@ -33,12 +33,13 @@ public class starseed_owner
     public void setcolor()
     {
         period_time += Time.deltaTime / PERIOD;
-        while(period_time > 1)
+        while(period_time >= 1)
             period_time -= 1;
         
         int where = Mathf.FloorToInt(period_time * pattern.Length);
         float c = pattern[where];
-        Color cc = isred? new Color(c, 0f, 0f, c): new Color(0f, c, 0f, c);
+        Color cc = isred? Config.starseed_red * c:
+                          Config.starseed_green * c;
         ob.GetComponent<Renderer>().material.SetColor("_EmissionColor", cc);
         // apparently unity generates a new material when you do stuff to
         // the material on an object, and you have to delete the material

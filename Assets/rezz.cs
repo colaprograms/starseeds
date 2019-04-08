@@ -33,6 +33,8 @@ public class RezFactory {
     public GameObject Rez(GameObject template)
     {
         GameObject newObject = UnityEngine.Object.Instantiate(template);
+        if(registered == null)
+            throw new System.Exception("tried to rez after we destroyed everything");
         if(registered.ContainsKey(newObject))
             throw new System.Exception("the dictionary is broken");
         registered[newObject] = true;
@@ -150,6 +152,8 @@ public class RezolveFile {
     }
     
     void safetyrun(Action act) {
+        if(!valid)
+            return;
         try {
             act.Invoke();
         }
@@ -178,7 +182,7 @@ public class RezolveFile {
     }
     
     public void glitch() {
-        rezf.Glitch();
+        if(rezf != null) rezf.Glitch();
         glitched = true;
     }
 };      
@@ -196,6 +200,16 @@ public class rezz : MonoBehaviour
     [System.NonSerialized]
     object queuelock;
     
+    [System.NonSerialized]
+    System.Collections.Generic.Queue<string> log_queue;
+    [System.NonSerialized]
+    object errorlock;
+    [System.NonSerialized]
+    System.IO.StreamWriter log_write;
+    
+    [System.NonSerialized]
+    bool compiled_anything = false;
+    
 	void Start()
 	{
         path = System.IO.Path.Combine(Application.streamingAssetsPath, "rezolve");
@@ -210,6 +224,9 @@ public class rezz : MonoBehaviour
         dirwat.Changed += onchanged;
         dirwat.EnableRaisingEvents = true;
         dirwat.IncludeSubdirectories = true;
+        
+        make_log_queue();
+        
         reload();
 	}
     
@@ -229,6 +246,7 @@ public class rezz : MonoBehaviour
                 thejam = null;
             }
         }
+        write_out_log_queue();
         foreach(KeyValuePair<string, RezolveFile> rez in rezolve) {
             rez.Value.update();
         }
@@ -251,9 +269,9 @@ public class rezz : MonoBehaviour
     
     void onchanged(object source, System.IO.FileSystemEventArgs e)
     {
-        Debug.Log(String.Format("modified {0}", e.Name));
+        log(String.Format("modified {0}", e.Name));
         var name = nameof(e.FullPath, true);
-        Debug.Log(String.Format("Recompiling {0}", name));
+        log(String.Format("Recompiling {0}", name));
         if(rezolve.ContainsKey(name)) {
             Action thejam = delegate() { glitch_object(name); };
             lock(queuelock) {
@@ -272,6 +290,7 @@ public class rezz : MonoBehaviour
             System.IO.Directory.GetFiles,
             System.IO.Directory.GetDirectories
         };
+        compiled_anything = false;
         foreach(var method in methods) {
             foreach(var file in method(path, "*.cs")) {
                 var name = nameof(file, false);
@@ -282,7 +301,7 @@ public class rezz : MonoBehaviour
             queue.Enqueue(delegate() {
                 watch.Stop();
                 var t = watch.ElapsedMilliseconds * 0.001f;
-                Debug.Log(String.Format("Compilation took {0} seconds",
+                log(String.Format("{0} took {1} seconds.", compiled_anything? "Compilation": "Loading",
                     t));
             });
         }
@@ -336,10 +355,10 @@ public class rezz : MonoBehaviour
             // take it easy
         }
         else {
-            Debug.Log(String.Format("compiling {0}", ouf));
+            compiled_anything = true;
+            log(String.Format("compiling {0}", ouf));
             var result = ReallyCompile(name, file);
-            if(result == null)
-                return;
+            if(result == null) return;
         }
         
         var assm = System.Reflection.Assembly.Load(
@@ -380,7 +399,7 @@ public class rezz : MonoBehaviour
         
         if(IsDirectory(file)) {
             string[] what = AllSourceFiles(file);
-            Debug.Log(String.Format("compiling a batch {0}", what));
+            log(String.Format("compiling a batch {0}", what));
             result = provider.CompileAssemblyFromFile(param, AllSourceFiles(file));
         }
         else
@@ -425,15 +444,49 @@ public class rezz : MonoBehaviour
         return result;
 	}
     
+    void make_log_queue()
+    {
+        string path = System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "compiler.log");
+        Debug.Log("rezolve log is " + path);
+        log_write = new System.IO.StreamWriter(
+            path);
+        log_queue = new System.Collections.Generic.Queue<string>();
+        errorlock = new object();
+    }
+    
+    void write_out_log_queue()
+    {
+        string towrite = "";
+        bool flush = false;
+        while(true) {
+            lock(errorlock) {
+                if(log_queue.Count == 0)
+                    break;
+                else
+                    towrite = log_queue.Dequeue();
+            }
+            log_write.WriteLine(towrite);
+            flush = true;
+        }
+        if(flush)
+            log_write.Flush();
+    }
+    
+    void log(string mesg) {
+        lock(errorlock) {
+            log_queue.Enqueue(mesg);
+        }
+        Debug.Log(mesg);
+    }
+    
     void except(Exception e)
     {
-        Debug.LogException(e);
-        Debug.Log(e.StackTrace);
+        log(e.ToString());
     }
     
     void compileexcept(string probs)
     {
-        Debug.Log(probs);
+        log(probs);
     }
     
     void glitch_object(string name)

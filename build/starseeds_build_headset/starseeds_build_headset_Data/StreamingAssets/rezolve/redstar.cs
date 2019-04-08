@@ -38,7 +38,6 @@ public class redstardata {
     public float launch_clock = 0f;
     public float die_clock = 0f;
     public Vector3 vector;
-    public const float DIE_SPEED = 60f; // seconds
     public int[] candidates;
     int current_candidate = 0;
     
@@ -54,7 +53,15 @@ public class redstardata {
             return; // this is handled by earthblinks
         if(!GameDad.is_green(ix))
             throw new Exception("red star was not green??");
-        star.size = 0.031f - star.size;
+        if(star.size == 0.02f) {
+            star.size = 0.011f;
+            star.color = greenstar.StarColor.RedSmall;
+        }
+        else {
+            star.size = 0.02f;
+            star.color = greenstar.StarColor.RedLarge;
+        }
+        //star.size = 0.031f - star.size;
         GameDad.update_green(ix);
     }
     
@@ -67,7 +74,7 @@ public class redstardata {
                 launch();
             }
         }
-        if(redstar.exponential_decay(1/DIE_SPEED)) {
+        if(redstar.exponential_decay(1/Config.red_average_life)) {
             GameDad.red_star_evaporate(ix);
             return;
         }
@@ -101,7 +108,6 @@ public class redstar: Rezolve // test
     Dictionary<int, redstardata> red_stars;
     Dictionary<int, float> quiet_stars;
     float time = 0f;
-    const float QUIET_DURATION = 10f;
     
     public static bool exponential_decay(float speed) {
         return UnityEngine.Random.value > Mathf.Exp(-Time.deltaTime * speed);
@@ -137,7 +143,7 @@ public class redstar: Rezolve // test
     {
         red_stars.Remove(ix);
         GameDad.remove_green(ix);
-        quiet_stars[ix] = QUIET_DURATION;
+        quiet_stars[ix] = Config.quiettime;
     }
     
     public bool give_chance_to_make_red_star(int start, Vector3 startLocation, int end, Vector3 endLocation) {
@@ -146,15 +152,9 @@ public class redstar: Rezolve // test
         if(quiet_stars.ContainsKey(end))
             return false; // star is quiet QUIET_DURATION seconds after spambots die
         float r = UnityEngine.Random.value;
-        if(r > 0.1) {
-            Debug.Log(String.Format("{0} > 0.1, not making red star", r));
+        if(r > Config.chance_of_red) // test
             return false;
-        }
-        Debug.Log(String.Format("{0} <= 0.1, making red star", r));
-        //Debug.Log("trying red star");
         gamedad_make_red(end, startLocation - endLocation, true); // test
-        //if(GameDad.send_red_hook != null)
-        //    GameDad.send_red_hook(end, start);
         return true;
     }
     

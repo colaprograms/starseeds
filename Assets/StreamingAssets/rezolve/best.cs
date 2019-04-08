@@ -8,8 +8,6 @@ class best: Rezolve {
     GameObject maxdistance, time_elapsed;
     float cur = 0f, max = 0f, lagcur = 0f, lagmax = 0f, time = -1f;
     bool max_is_on = false, died = false;
-    const float SPEED = 1f;
-    const float LENGTH_OF_GAME = 60f; // 5 minutes
     
     public override void start() {
         GameDad.gamesover = false;
@@ -58,7 +56,7 @@ class best: Rezolve {
         //var t = curdistance.GetComponent<Text>();
         var t = curdistance.GetComponent<TextMesh>();
         var m = maxdistance.GetComponent<TextMesh>();
-        t.color = new Color(0f, 0.92f, 0f, 1f);
+        t.color = Config.game_over_text_colour;
         t.text = String.Format(whysover);
         m.text = String.Format("BEST MAX {0:00.00}", max);
         return;
@@ -67,14 +65,14 @@ class best: Rezolve {
     
     public float lag(float x, float l) {
         if(x > l) {
-            l += Mathf.Sqrt(x - l) * SPEED * Time.deltaTime;
+            l += Mathf.Sqrt(x - l) * Config.starseed_speed * Time.deltaTime;
             if(l > x)
                 return x;
             else
                 return l;
         }
         else {
-            l -= Mathf.Sqrt(l - x) * SPEED * Time.deltaTime;
+            l -= Mathf.Sqrt(l - x) * Config.starseed_speed * Time.deltaTime;
             if(l < x)
                 return x;
             else
@@ -92,7 +90,7 @@ class best: Rezolve {
             time_elapsed.GetComponent<TextMesh>().text = String.Format("TIME: {0:00}:{1:00}", Mathf.FloorToInt(time / 60),
                                                                                               Mathf.FloorToInt(time) % 60);
         }
-        if(time >= LENGTH_OF_GAME) {
+        if(time >= Config.length_of_game) {
             gameover("TIME'S UP");
             return;
         }

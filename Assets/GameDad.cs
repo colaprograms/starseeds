@@ -64,8 +64,12 @@ public class greenstar {
     public enum Type {
         Green, Red, Quiet
     };
+    public enum StarColor {
+        Green, RedLarge, RedSmall
+    };
     
     public Type type = Type.Green;
     
     public float size = float.NaN;
+    public StarColor color = StarColor.Green;
 }

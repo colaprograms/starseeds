@@ -124,11 +124,11 @@ public class starinstantiator : Rezolve
             Color? thecolor = null;
             switch(star.type) {
                 case greenstar.Type.Green:
-                    thecolor = new Color(0f, 1f, 0f, 1f);
+                    thecolor = Config.getcolor(greenstar.StarColor.Green);
                     reveal_neighbourhood = true;
                     break;
                 case greenstar.Type.Red:
-                    thecolor = new Color(1f, 0f, 0f, 1f);
+                    thecolor = Config.getcolor(greenstar.StarColor.RedLarge);
                     large_star = true;
                     break;
                 case greenstar.Type.Quiet:
@@ -140,7 +140,7 @@ public class starinstantiator : Rezolve
                 particles[r.start].startColor = thecolor.Value;
                 particles[r.start].startSize = large_star? 0.02f: 0.01f;
                 for(int j = 1; j < r.length; j++) {
-                    particles[r.start + j].startSize = 0f;
+                    //particles[r.start + j].startSize = 0f;
                     particles[r.start + j].startColor = thecolor.Value;
                 }
             }
@@ -370,6 +370,7 @@ public class starinstantiator : Rezolve
         if(!float.IsNaN(star.size)) {
             range s = star_to_particle_range[index];
             particles[s.start].startSize = star.size;
+            particles[s.start].startColor = Config.getcolor(star.color);
             setparticles_later = true;
         }
     }

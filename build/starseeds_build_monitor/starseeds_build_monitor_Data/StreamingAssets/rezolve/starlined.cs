@@ -290,15 +290,31 @@ public class starlined: Rezolve
         return GameDad.realvector_to_spacevector(diff).magnitude > 4;
     }
     
+    line_materials linm = null;
+    
+    void find_line_materials() {
+        if(linm == null)
+            linm = GameObject.Find("line_materials").GetComponent<line_materials>();
+    }
+    
     void make_line_red(LineRenderer l, bool isred) {
+        if(Config.red_should_be_dashed)
+            find_line_materials();
+        
         if(!line_currently_red && isred) {
-            l.startColor = new Color(1f, 0f, 0f, 1f);
-            l.endColor = new Color(0.2f, 0f, 0f, 0.4f);
+            l.startColor = Config.line_red_start; //new Color(1f, 0f, 0f, 1f);
+            l.endColor = Config.line_red_end; //new Color(0.2f, 0f, 0f, 0.4f);
+            if(Config.red_should_be_dashed)
+                l.material = linm.dashed;
+            l.startWidth = Config.red_line_startwidth;
             line_currently_red = true;
         }
         else if(line_currently_red && !isred) { // test
-            l.startColor = new Color(125f/255f, 1f, 0f, 1f);
-            l.endColor = new Color(20f/255f, 131f/255f, 11f/255f, 127/255f);
+            l.startColor = Config.line_green_start; //new Color(125f/255f, 1f, 0f, 1f);
+            l.endColor = Config.line_green_end; //new Color(20f/255f, 131f/255f, 11f/255f, 127/255f);
+            if(Config.red_should_be_dashed)
+                l.material = linm.standard;
+            l.startWidth = Config.green_line_startwidth;
             line_currently_red = false;
         }
     }
