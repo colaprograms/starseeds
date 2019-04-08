@@ -42,7 +42,8 @@ On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".
 On distancepanels:
 * disable the script "Meta Locking" and enable "Lock_to_camera_ii".
 * enable the child object monitor
-* disable the child object headset  
+* disable the child object headset
+
 Disable metainterface.
 
 To get the headset, do the opposite:
@@ -53,5 +54,6 @@ On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".
 On distancepanels:
 * enable the script "Meta Locking" and disable "Lock_to_camera_ii".
 * disable monitor
-* enable headset  
+* enable headset
+
 Enable metainterface.
