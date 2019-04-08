@@ -34,7 +34,7 @@ Colors and stuff can be configured by editing:
 
 ## Changing the Unity project between the headset and monitor
 
-To get regular 3d:
+### To get regular 3d:
 
 Enable Main Camera.  
 Disable MetaCameraRig.  
@@ -46,7 +46,7 @@ On distancepanels:
 
 Disable metainterface.
 
-To get the headset, do the opposite:
+### To get the headset, do the opposite:
 
 Disable Main Camera.  
 Enable MetaCameraRig.  
