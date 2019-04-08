@@ -24,7 +24,7 @@ Builds:
 
 Okay.
 
-![Screenshot from March 20, 2019](screenshots/screenshot-2019-03-20.jpg)
+![Screenshot from April 8, 2019](screenshots/screenshot-2019-04-08.jpg)
 
 ## Switching between the headset and regular 3d on the monitor
 
