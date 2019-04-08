@@ -32,18 +32,26 @@ Colors and stuff can be configured by editing:
 
     build\starseeds_build_(whatever)\starseeds_build_(whatever)_data\StreamingAssets\Rezolve\config.cs
 
-## Switching between the headset and regular 3d on the monitor
+## Changing the Unity project between the headset and monitor
 
 To get regular 3d:
 
 Enable Main Camera.  
 Disable MetaCameraRig.  
 On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".  
-On panels, disable the script "Meta Locking" and enable "Lock_to_camera_ii".
+On distancepanels:
+* disable the script "Meta Locking" and enable "Lock_to_camera_ii".
+* enable the child object monitor
+* disable the child object headset
+Disable metainterface.
 
 To get the headset, do the opposite:
 
 Disable Main Camera.  
 Enable MetaCameraRig.  
 On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".  
-On panels, enable the script "Meta Locking" and disable "Lock_to_camera_ii".
+On distancepanels:
+* enable the script "Meta Locking" and disable "Lock_to_camera_ii".
+* disable monitor
+* enable headset
+Enable metainterface.
