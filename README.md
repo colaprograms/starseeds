@@ -2,9 +2,14 @@
 
 This small AR game was written for the Meta 2 headset by [Hannah Cairns](mailto:hannah.abigail.cairns@gmail.com).
 
-Send little green ships from stars you control to ones that you don't, and then build new launchers. Try to get as far from Earth as possible. Avoid getting a virus.
+Send little green ships from stars you control to ones that you don't. Try to get as far from Earth as possible. Do not get eaten by space.
 
-It is not finished. See issues for status.
+Builds:
+
+* build\starseeds_build_monitor
+  * play the game in a regular window, should run on any windows machine
+* build\starseeds_build_headset
+  * play the game on a Meta 2 headset
 
 ## Gameplay
 
