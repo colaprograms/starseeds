@@ -50,8 +50,11 @@ public class starseed_owner
     {
         if(stop)
             return false;
-        distance += speed * Time.deltaTime;
         setcolor();
+        if(GameDad.gamesover) { // starseed stop when game is over (but they keep on blinking)
+            return true;
+        }
+        distance += speed * Time.deltaTime;
         float d = Vector3.Distance(startLocation, endLocation);
         if(d <= distance) {
             moveto(1);
@@ -107,11 +110,17 @@ public class launch: Rezolve
     
     public void linedrawn(int start, Vector3 startLocation, int end, Vector3 endLocation)
     {
+        if(GameDad.gamesover) {
+            return; // no starseeds launch after game over
+        }
         make_starseed(start, startLocation, end, endLocation, 0.01f);
     }
     
     public void send_red(int start, int end)
     {
+        if(GameDad.gamesover) {
+            return; // no starseeds launch after game over
+        }
         Vector3 startLocation = GameDad.whereisstar(start);
         Vector3 endLocation = GameDad.whereisstar(end);
         make_starseed(start, startLocation, end, endLocation, 0.01f, true);

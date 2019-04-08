@@ -30,6 +30,8 @@ public class GameDad {
     
     public static int sol_index = -1;
     
+    public static bool gamesover = false;
+    
     public static Action<int, Vector3> starmouseover_hook = null;
     public static Action<int, Vector3, int, Vector3> linedrawn_hook = null;
     public static Action<int, int> send_red_hook = null;

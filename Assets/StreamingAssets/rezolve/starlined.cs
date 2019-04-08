@@ -128,56 +128,73 @@ public class starlined: Rezolve
             // and linedrawn_hook should come from launch
             return;
         }
-        if(Input.GetKey("space") || (GameDad.headset_button_is_pushed != null && GameDad.headset_button_is_pushed())) {
-            if(pressed == false) {
-                pressed = true;
-                if(line != null)
-                    throw new Exception("line already created even though pressed is false");
-                if(pressed_star != -1)
-                    throw new Exception("pressed_star != -1 even though pressed is false");
-                if(GameDad.selectedStar != -1) {
-                    pressed_star = GameDad.selectedStar;
-                    pressed_star_position = GameDad.selectedStarLocation;
-                    line = Rez(Find("line_template"));
-                    line.SetActive(true);
-                    line_currently_red = false;
-                    GameDad.setmode(StarInstantiatorMode.AnyStarSelect);
-                }
-                // If there is no selected star, we still set pressed to true,
-                // but we leave pressed_star at -1.
-            }
+        bool space = Input.GetKey("space");
+        if(GameDad.headset_button_is_pushed != null && GameDad.headset_button_is_pushed())
+            space = true;
+        if(GameDad.gamesover) // no button once the game is over
+            space = false;
+        if(space) {
+            if(pressed == false)
+                space_pressed();
             updateline();
         }
         else {
-            if(pressed == true) {
-                pressed = false;
-                if(pressed_star != -1) {
-                    // There is a line from a star.
-                    if(GameDad.is_green(pressed_star) && GameDad.get_green(pressed_star).type == greenstar.Type.Green) {
-                        // The star is green.
-                        if(GameDad.selectedStar != -1) {
-                            // The line goes to another star.
-                            if(!too_far(pressed_star_position - GameDad.selectedStarLocation)) {
-                                // The line is not too long.
-                                GameDad.linedrawn_hook(pressed_star,
-                                               pressed_star_position,
-                                               GameDad.selectedStar,
-                                               GameDad.selectedStarLocation);
-                            }
+            if(pressed == true)
+                space_release();
+        }
+    }
+    
+    void space_pressed()
+    {
+        if(pressed == false) {
+            pressed = true;
+            if(line != null)
+                throw new Exception("line already created even though pressed is false");
+            if(pressed_star != -1)
+                throw new Exception("pressed_star != -1 even though pressed is false");
+            if(GameDad.selectedStar != -1) {
+                pressed_star = GameDad.selectedStar;
+                pressed_star_position = GameDad.selectedStarLocation;
+                line = Rez(Find("line_template"));
+                line.SetActive(true);
+                line_currently_red = false;
+                GameDad.setmode(StarInstantiatorMode.AnyStarSelect);
+            }
+            // If there is no selected star, we still set pressed to true,
+            // but we leave pressed_star at -1.
+        }
+    }
+    
+    void space_release()
+    {
+        if(pressed == true) {
+            pressed = false;
+            if(pressed_star != -1) {
+                // There is a line from a star.
+                if(GameDad.is_green(pressed_star) && GameDad.get_green(pressed_star).type == greenstar.Type.Green) {
+                    // The star is green.
+                    if(GameDad.selectedStar != -1) {
+                        // The line goes to another star.
+                        if(!too_far(pressed_star_position - GameDad.selectedStarLocation)) {
+                            // The line is not too long.
+                            GameDad.linedrawn_hook(pressed_star,
+                                           pressed_star_position,
+                                           GameDad.selectedStar,
+                                           GameDad.selectedStarLocation);
                         }
                     }
                 }
-                else {
-                    // The player held the space key down without having a star selected.
-                    if(line != null)
-                        throw new Exception("there should be no line allocated, but there is");
-                }
-                pressed_star = -1;
-                GameDad.setmode(StarInstantiatorMode.GreenSelect);
             }
-            if(line != null)
-                DeRez(line);
+            else {
+                // The player held the space key down without having a star selected.
+                if(line != null)
+                    throw new Exception("there should be no line allocated, but there is");
+            }
+            pressed_star = -1;
+            GameDad.setmode(StarInstantiatorMode.GreenSelect);
         }
+        if(line != null)
+            DeRez(line);
     }
     
     // Hook to run when a star is selected
@@ -238,7 +255,7 @@ public class starlined: Rezolve
                 name = "STAR IN " + constellation;
         }
         else
-            name = "UNKNOWN NAME";
+            name = "UNNAMED STAR";
         starnames.GetComponent<TextMesh>().text = name;
         stardistance.GetComponent<TextMesh>().text = pressed? String.Format("DIST {0:00.00} PC", distance): "";
         //spectral_type.GetComponent<TextMesh>().text = spectr;

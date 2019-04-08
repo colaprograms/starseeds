@@ -177,7 +177,7 @@ class Pile:
         for _, v in self.pile.items():
             for i in range(len(v)):
                 for j in range(i + 1, len(v)):
-                    if dist(v[i], v[j]) < 0.2:
+                    if dist(v[i], v[j]) < 0.4:
                         self.un.union(v[i], v[j])
         return self.un.get_all_groups()
 
@@ -193,7 +193,7 @@ def run():
     for r in rr:
         st = Star(r)
         d = math.sqrt(st.x * st.x + st.y * st.y + st.z * st.z)
-        if d > 1000:
+        if d > 100:
             continue
         lines += 1
         if lines % 10000 == 0: print("%d lines" % lines)

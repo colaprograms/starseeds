@@ -120,11 +120,11 @@ Material:
     - _SquashAmount: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WavyDisplFreq: 21.537039
+    - _WavyDisplFreq: 13.956165
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DisplacementAmount: {r: 0.0015370391, g: 0, b: 0, a: 0.01}
+    - _DisplacementAmount: {r: -0.006043834, g: 0, b: 0, a: 0.01}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
