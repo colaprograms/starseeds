@@ -34,6 +34,8 @@ Colors and stuff can be configured by editing:
 
 ## Changing the Unity project between the headset and monitor
 
+If you are editing the Unity project, here's how to switch between the headset and monitor.
+
 *To get regular 3d:*
 
 Enable Main Camera.  
