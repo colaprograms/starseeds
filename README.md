@@ -26,6 +26,12 @@ Okay.
 
 ![Screenshot from April 8, 2019](screenshots/screenshot-2019-04-08.jpg)
 
+## Configuration
+
+Colors and stuff can be configured by editing:
+
+    build\starseeds_build_(whatever)\starseeds_build_(whatever)_data\StreamingAssets\Rezolve\config.cs
+
 ## Switching between the headset and regular 3d on the monitor
 
 To get regular 3d:
