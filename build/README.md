@@ -2,9 +2,14 @@
 
 This small AR game was written for the Meta 2 headset by [Hannah Cairns](mailto:hannah.abigail.cairns@gmail.com).
 
-Send little green ships from stars you control to ones that you don't, and then build new launchers. Try to get as far from Earth as possible. Avoid getting a virus.
+Send little green ships from stars you control to ones that you don't. Try to get as far from Earth as possible. Do not get eaten by space.
 
-It is not finished. See issues for status.
+Builds:
+
+* build\starseeds_build_monitor
+  * play the game in a regular window, should run on any windows machine
+* build\starseeds_build_headset
+  * play the game on a Meta 2 headset
 
 ## Gameplay
 
@@ -19,20 +24,38 @@ It is not finished. See issues for status.
 
 Okay.
 
-![Screenshot from March 20, 2019](screenshots/screenshot-2019-03-20.jpg)
+![Screenshot from April 8, 2019](screenshots/screenshot-2019-04-08.jpg)
 
-## Switching between the headset and regular 3d on the monitor
+## Configuration
 
-To get regular 3d:
+Colors and stuff can be configured by editing:
+
+    build\starseeds_build_(whatever)\starseeds_build_(whatever)_data\StreamingAssets\Rezolve\config.cs
+
+## Changing the Unity project between the headset and monitor
+
+If you are editing the Unity project, here's how to switch between the headset and monitor.
+
+*To get regular 3d:*
 
 Enable Main Camera.  
 Disable MetaCameraRig.  
 On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".  
-On panels, disable the script "Meta Locking" and enable "Lock_to_camera_ii".
+On distancepanels:
+* disable the script "Meta Locking" and enable "Lock_to_camera_ii".
+* enable the child object monitor
+* disable the child object headset
 
-To get the headset, do the opposite:
+Disable metainterface.
+
+*To get the headset, do the opposite:*
 
 Disable Main Camera.  
 Enable MetaCameraRig.  
 On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".  
-On panels, enable the script "Meta Locking" and disable "Lock_to_camera_ii".
+On distancepanels:
+* enable the script "Meta Locking" and disable "Lock_to_camera_ii".
+* disable monitor
+* enable headset
+
+Enable metainterface.
