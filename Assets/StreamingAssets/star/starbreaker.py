@@ -193,6 +193,9 @@ def run():
     for r in rr:
         st = Star(r)
         d = math.sqrt(st.x * st.x + st.y * st.y + st.z * st.z)
+        if st.x == 0.000005 and st.y == 0 and st.z == 0 and st.proper == "Sol":
+            print("Earth detected")
+            st.proper = "Earth"
         if d > 100:
             continue
         lines += 1
