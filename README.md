@@ -13,6 +13,8 @@ Builds:
 
 ## Gameplay
 
+See https://colaprograms.github.io/starseeds, or open the file docs/index.html.
+
 #### Controls
 
 1. Select a green star with the chevron that is stuck to your head.
