@@ -143,6 +143,7 @@ public class launch: Rezolve
         if(GameDad.get_particle_system_scale != null) {
             float scale = GameDad.get_particle_system_scale();
             starseed.transform.localScale *= scale;
+            speed *= Mathf.Sqrt(scale);
         }
         Action whenhit = delegate() {
             if(!isred) {
