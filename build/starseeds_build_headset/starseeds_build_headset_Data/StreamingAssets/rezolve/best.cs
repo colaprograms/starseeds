@@ -23,6 +23,7 @@ class best: Rezolve {
         //maxdistance.GetComponent<Text>().text = "";
         curdistance.GetComponent<TextMesh>().text = String.Format("", cur);
         maxdistance.GetComponent<TextMesh>().text = "";
+        time_elapsed.GetComponent<TextMesh>().text = "";
     }
     
     public void update_best() {

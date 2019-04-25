@@ -58,6 +58,10 @@ public class GameDad {
     public static Func<bool> are_there_green_starseeds = null;
     
     public static Material shiny_red, shiny_green, shiny_black;
+    
+    public static Func<float> get_particle_system_scale = null;
+    public static Func<Vector3> get_particle_system_position = null;
+    public static Action update_particle_system_tf = null;
 }
 
 public class greenstar {

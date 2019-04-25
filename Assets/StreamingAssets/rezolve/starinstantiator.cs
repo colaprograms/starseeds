@@ -78,6 +78,19 @@ public class starinstantiator : Rezolve
         GameDad.realvector_to_spacevector = realvector_to_spacevector;
         GameDad.star_corresponds_to_particle = star_corresponds_to_particle;
         GameDad.farthest_green_star = farthest_green_star;
+        
+        GameDad.update_particle_system_tf = update_particle_system_tf;
+    }
+    
+    void update_particle_system_tf() {
+        if(instantiated == null)
+            return;
+        if(GameDad.get_particle_system_scale == null || GameDad.get_particle_system_position == null)
+            return;
+        float scale = GameDad.get_particle_system_scale();
+        Vector3 position = GameDad.get_particle_system_position();
+        instantiated.transform.localScale = new Vector3(scale, scale, scale);
+        instantiated.transform.localPosition = position;
     }
     
     void setmode(StarInstantiatorMode _mode) {

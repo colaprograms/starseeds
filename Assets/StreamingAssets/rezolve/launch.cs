@@ -140,6 +140,10 @@ public class launch: Rezolve
     public void make_starseed(int start, Vector3 startLocation, int end, Vector3 endLocation, float speed, bool isred = false)
     {
         GameObject starseed = isred? RezFind("spamseed_icon"): RezFind("starseed_icon");
+        if(GameDad.get_particle_system_scale != null) {
+            float scale = GameDad.get_particle_system_scale();
+            starseed.transform.localScale *= scale;
+        }
         Action whenhit = delegate() {
             if(!isred) {
                 // a green starseed has hit a star

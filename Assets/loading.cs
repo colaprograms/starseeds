@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class loading : MonoBehaviour {
-    const int NSTARS = 119614;
+    const int NSTARS = 24685; //119614;
     const float SCALE = 0.72f;
     
     public GameObject loadBar;
