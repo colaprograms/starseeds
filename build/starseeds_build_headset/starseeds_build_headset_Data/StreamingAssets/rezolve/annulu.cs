@@ -30,6 +30,8 @@ class annulu: Rezolve {
             setactive(true); // test
             cyl.transform.position = GameDad.selectedStarLocation;
             float s = 0.004f * (1 + Mathf.Exp(-time/20f));
+            if(GameDad.get_particle_system_scale != null)
+                s *= GameDad.get_particle_system_scale();
             cyl.transform.localScale = new Vector3(s, s, s * 0.1f);
             //cyl.transform.rotation = Quaternion.Euler(0, time, 0);
         }

@@ -409,13 +409,14 @@ public class starinstantiator : Rezolve
             return;
         if(!started) {
             started = true;
-            reticle = GameObject.Find("reticle");
+            reticle = Find("reticle");
             system = Find("star_particles");
             
             instantiated = Rez(system);
             int nstars = GameDad.manystars.nstars();
             particles = new ParticleSystem.Particle[nstars+1];
             instantiated.SetActive(true);
+            reticle.SetActive(true);
             
             allocate_particle_for_star(0);
             add_green(0, null);
