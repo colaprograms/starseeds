@@ -48,6 +48,10 @@ public class particlescaler: Rezolve
             moveby(Vector3.forward);
         if(Input.GetKey("down"))
             moveby(Vector3.back);
+        if(Input.GetKey("page up"))
+            moveby(Vector3.up);
+        if(Input.GetKey("page down"))
+            moveby(Vector3.down);
         if(dirty) {
             Debug.Log(String.Format("updating {0}", scale));
             GameDad.update_particle_system_tf();

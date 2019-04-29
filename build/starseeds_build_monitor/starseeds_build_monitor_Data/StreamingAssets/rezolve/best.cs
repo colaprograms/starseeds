@@ -1,28 +1,32 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using UnityEngine.UI; // test
 
 class best: Rezolve {
-    GameObject curdistance;
-    GameObject maxdistance, time_elapsed;
+    GameObject curdistance, maxdistance, time_elapsed, gameend, bestmax, hitf;
     float cur = 0f, max = 0f, lagcur = 0f, lagmax = 0f, time = -1f;
     bool max_is_on = false, died = false;
     
     public override void start() {
         GameDad.gamesover = false;
-        
-        //curdistance = GameObject.Find("curdistance");
-        //maxdistance = GameObject.Find("maxdistance");
         curdistance = GameObject.Find("curdistance_1");
         maxdistance = GameObject.Find("maxdistance_1");
         time_elapsed = GameObject.Find("time_elapsed");
-        // rar
+        bestmax = GameObject.Find("bestmax");
+        gameend = GameObject.Find("gameend");
+        hitf = GameObject.Find("hitf");
         GameDad.update_best = update_best;
-        //curdistance.GetComponent<Text>().text = String.Format("", cur);
-        //maxdistance.GetComponent<Text>().text = "";
-        curdistance.GetComponent<TextMesh>().text = String.Format("", cur);
-        maxdistance.GetComponent<TextMesh>().text = "";
+        put(curdistance, "");
+        put(maxdistance, "");
+        put(time_elapsed, "");
+        put(bestmax, "");
+        put(gameend, "");
+        put(hitf, "");
+    }
+    
+    void put(GameObject what, string text) {
+        what.GetComponent<TextMesh>().text = text;
     }
     
     public void update_best() {
@@ -36,7 +40,7 @@ class best: Rezolve {
             start_timer_if_there_are_green_starseeds();
         if(cur == -1) {
             if(GameDad.are_there_green_starseeds != null && !GameDad.are_there_green_starseeds()) {
-                gameover("GAME OVER");
+                gameover("HUMANS EXTINCT");
             }
             else
                 cur = 0f;
@@ -51,15 +55,15 @@ class best: Rezolve {
             time = 0;
     }
     
-    void gameover(string whysover) {
+    void gameover(string whyend) {
         GameDad.gamesover = true;
-        //var t = curdistance.GetComponent<Text>();
-        var t = curdistance.GetComponent<TextMesh>();
-        var m = maxdistance.GetComponent<TextMesh>();
-        t.color = Config.game_over_text_colour;
-        t.text = String.Format(whysover);
-        m.text = String.Format("BEST MAX {0:00.00}", max);
-        return;
+        Find("reticle").SetActive(false);
+        put(curdistance, "");
+        put(maxdistance, "");
+        put(time_elapsed, "");
+        put(gameend, whyend);
+        put(bestmax, String.Format("BEST MAX {0:00.00}", max));
+        put(hitf, "HIT F4 TO RESTART");
     }
 
     
@@ -97,8 +101,8 @@ class best: Rezolve {
         if(cur != lagcur || max != lagmax) {
             lagcur = lag(cur, lagcur);
             lagmax = lag(max, lagmax);
-            curdistance.GetComponent<TextMesh>().text = String.Format("CURRENT MAX {0:00.00}", lagcur);
-            maxdistance.GetComponent<TextMesh>().text = max_is_on? String.Format("BEST MAX {0:00.00}", lagmax): "";
+            put(curdistance, String.Format("CURRENT MAX {0:00.00}", lagcur));
+            put(maxdistance, max_is_on? String.Format("BEST MAX {0:00.00}", lagmax): "");
             //curdistance.GetComponent<Text>().text = String.Format("CURRENT DISTANCE\n{0:00.00} PC", lagcur);
             //maxdistance.GetComponent<Text>().text = max_is_on? String.Format("MAXIMUM DISTANCE\n{0:00.00} PC", lagmax): "";
         }
