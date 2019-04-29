@@ -42,7 +42,7 @@ If you are editing the Unity project, here's how to switch between the headset a
 
 Enable Main Camera.  
 Disable MetaCameraRig.  
-On reticle, disable the script "Meta Locking" and enable "Lock_to_camera".  
+On rezolve/reticle, disable the script "Meta Locking" and enable "Lock_to_camera".  
 On distancepanels:
 * disable the script "Meta Locking" and enable "Lock_to_camera_ii".
 * enable the child object monitor
@@ -54,7 +54,7 @@ Disable metainterface.
 
 Disable Main Camera.  
 Enable MetaCameraRig.  
-On reticle, enable the script "Meta Locking" and disable "Lock_to_camera".  
+On rezolve/reticle, enable the script "Meta Locking" and disable "Lock_to_camera".  
 On distancepanels:
 * enable the script "Meta Locking" and disable "Lock_to_camera_ii".
 * disable monitor
