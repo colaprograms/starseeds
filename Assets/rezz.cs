@@ -210,6 +210,13 @@ public class rezz : MonoBehaviour
     [System.NonSerialized]
     bool compiled_anything = false;
     
+    static rezz _rezz_instance = null;
+    
+    public static void Log(string st) {
+        if(_rezz_instance != null)
+            _rezz_instance.log(st);
+    }
+    
 	void Start()
 	{
         path = System.IO.Path.Combine(Application.streamingAssetsPath, "rezolve");
@@ -226,6 +233,8 @@ public class rezz : MonoBehaviour
         dirwat.IncludeSubdirectories = true;
         
         make_log_queue();
+        
+        _rezz_instance = this;
         
         reload();
 	}
@@ -446,7 +455,7 @@ public class rezz : MonoBehaviour
     
     void make_log_queue()
     {
-        string path = System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "compiler.log");
+        string path = System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "run.log");
         Debug.Log("rezolve log is " + path);
         log_write = new System.IO.StreamWriter(
             path);

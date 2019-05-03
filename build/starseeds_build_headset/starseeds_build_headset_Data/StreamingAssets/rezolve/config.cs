@@ -16,7 +16,7 @@ public class config: Rezolve
         Config.star_green = rgb(0, 1, 0); // colour of green star
         
         // The red stars blink. You can change the colours separately for each size.
-        Config.star_redLarge = rgb(1, 0, 1); // colour 1 for red star
+        Config.star_redLarge = rgb(1, 0, 0); // colour 1 for red star
         Config.star_redSmall = rgb(1, 0, 1); // colour 2 for red star
         
         Config.starseed_green = rgb(0, 1, 0); // colour of green starseeds

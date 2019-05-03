@@ -1,1 +1,4 @@
-Loading took 0.064 seconds.
+compiling D:\documents\starseeds\Assets\StreamingAssets\rezolve\best.dll
+Error (27:14): An object reference is required to access non-static member `rezz.log(string)'
+
+Compilation took 1.513 seconds.

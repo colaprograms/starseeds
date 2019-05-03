@@ -23,6 +23,8 @@ class best: Rezolve {
         put(bestmax, "");
         put(gameend, "");
         put(hitf, "");
+        
+        rezz.Log("pie is delicious");
     }
     
     void put(GameObject what, string text) {
