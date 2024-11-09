@@ -29,7 +29,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Collections.Generic;
 using System.Threading;
-using Meta.MetaAnalytics;
 using Meta.Mouse;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -60,24 +59,8 @@ namespace Meta
 
         private List<float> _slamInitTimes = new List<float>();
 
-#if !NET_2_0_SUBSET
-
-        private IMetaAnalytics _metaAnalytics;
-
-        public MetaSdkAnalytics()
-        {
-            _metaAnalytics = new MetaAnalytics.MetaAnalytics();
-        }
-#endif
-
         public void Init(IEventHandlers eventHandlers)
         {
-#if !NET_2_0_SUBSET
-            eventHandlers.SubscribeOnAwake(SceneStartAnalytics);
-            eventHandlers.SubscribeOnApplicationQuit(SceneStopAnalytics);
-            eventHandlers.SubscribeOnStart(InitSlamLocalizerAnalytics);
-
-#endif
         }
 
 
@@ -141,76 +124,5 @@ namespace Meta
         }
 
 
-#if !NET_2_0_SUBSET
-
-        private void SceneStartAnalytics()
-        {
-            Scene s = SceneManager.GetActiveScene();
-            string sceneName = s.name;
-
-            bool handsInScene = GameObject.FindObjectOfType(typeof(HandsProvider)) != null;
-            bool mouseInScene = GameObject.FindObjectOfType(typeof(MetaInputModule)) != null;
-
-            JObject o = new JObject();
-            o["scene_identifier"] = sceneName;
-            o["hands_present"] = handsInScene;
-            o["mouse_present"] = mouseInScene;
-            SendAsyncAnalytics("unity_sceneStarted", o);
-        }
-
-        private void SendAsyncAnalytics(string eventName, JObject o)
-        {
-            Thread t = new Thread(() => { _metaAnalytics.SendAnalytics(eventName, o.ToString()); });
-            t.Start();
-        }
-
-        private void SceneStopAnalytics()
-        {
-            Scene s = SceneManager.GetActiveScene();
-            string sceneName = s.name;
-            JObject o = new JObject();
-            o["scene_identifier"] = sceneName;
-            AddSlamAnalytics(o);
-            _metaAnalytics.SendAnalytics("unity_sceneEnded", o.ToString());
-        }
-
-        private void AddSlamAnalytics(JObject o)
-        {
-            o["slam_successful"] = _numberOfSuccessfulSlamInitializations;
-            o["slam_fail"] = _numberOfFailedSlamInitializations;
-            o["relocalization_time"] = _slamSuccessfulRelocalizationDuration;
-            o["relocalization_successful"] = _slamRelocalizationSuccessful;
-            o["imu_initialized"] = _slamImuStartedOk;
-
-            float min, avg, max;
-            min = avg = max = float.PositiveInfinity;
-
-            if (_slamInitTimes.Count > 0)
-            {
-                max = float.NegativeInfinity;
-                float sum = 0f;
-                foreach (float initTime in _slamInitTimes)
-                {
-                    if (initTime > max)
-                    {
-                        max = initTime;
-                    }
-
-                    if (initTime < min)
-                    {
-                        min = initTime;
-                    }
-
-                    sum += initTime;
-                }
-                avg = sum / (float) _slamInitTimes.Count;
-
-            }
-
-            o["slam_min_time"] = min;
-            o["slam_avg_time"] = avg;
-            o["slam_max_time"] = max;
-        }
-#endif
     }
 }

@@ -128,7 +128,9 @@ public class starlined: Rezolve
             // and linedrawn_hook should come from launch
             return;
         }
-        bool space = Input.GetKey("space");
+        //bool space = Input.GetKey("space");
+		
+		bool space = Input.GetButton("Jump");
         if(GameDad.headset_button_is_pushed != null && GameDad.headset_button_is_pushed())
             space = true;
         if(GameDad.gamesover) // no button once the game is over

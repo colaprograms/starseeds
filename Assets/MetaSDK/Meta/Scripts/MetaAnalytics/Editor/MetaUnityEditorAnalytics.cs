@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Diagnostics;
-using Meta.MetaAnalytics;
+//using Meta.MetaAnalytics;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEditor;
@@ -81,11 +81,11 @@ namespace Meta
 
         private static void OnUnityOpenedAnalytics()
         {
-            IMetaAnalytics _analytics = new MetaAnalytics.MetaAnalytics();
+            //IMetaAnalytics _analytics = new MetaAnalytics.MetaAnalytics();
 
-            JObject o = new JObject();
-            o["scene_unityVersion"] = Application.unityVersion;
-            _analytics.SendAnalytics("scene_unityVersion", o.ToString());
+            //JObject o = new JObject();
+            //o["scene_unityVersion"] = Application.unityVersion;
+            //_analytics.SendAnalytics("scene_unityVersion", o.ToString());
         }
 
     }

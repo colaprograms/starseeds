@@ -397,7 +397,10 @@ public class rezz : MonoBehaviour
 
 		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 		{
-			param.ReferencedAssemblies.Add(assembly.Location);
+            if (!assembly.IsDynamic && assembly.Location != "" && !assembly.Location.EndsWith("\\mscorlib.dll"))
+            {
+                param.ReferencedAssemblies.Add(assembly.Location);
+            }
 		}
 
 		param.GenerateExecutable = false;
