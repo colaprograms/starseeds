@@ -1,4 +1,4 @@
-Loading took 0.036 seconds.
+Loading took 0.323 seconds.
 pie is delicious
 System.TypeLoadException: Could not resolve type with token 01000008 from typeref (expected class 'UnityEngine.Input' in assembly 'UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null')
   at RezolveFile.safetyrun (System.Action act) [0x0000a] in C:\Users\Augusta\Documents\hannah\starseeds\Assets\rezz.cs:158 
