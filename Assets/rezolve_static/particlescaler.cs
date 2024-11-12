@@ -34,9 +34,10 @@ public class particlescaler: Rezolve
     }
     
     public override void update() {
-        if(GameDad.update_particle_system_tf == null)
+		if(GameDad.update_particle_system_tf == null)
             return;
-        if(Input.GetKeyDown("-"))
+        /*
+		if(Input.GetKeyDown("-"))
             scaleby(1/1.1f);
         if(Input.GetKeyDown("="))
             scaleby(1.1f);
@@ -52,8 +53,10 @@ public class particlescaler: Rezolve
             moveby(Vector3.up);
         if(Input.GetKey("page down"))
             moveby(Vector3.down);
-        if(dirty) {
-            Debug.Log(String.Format("updating {0}", scale));
+		*/
+		
+		if(dirty) {
+            //Debug.Log(String.Format("updating {0}", scale));
             GameDad.update_particle_system_tf();
             dirty = false;
         }

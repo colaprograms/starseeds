@@ -1,7 +1,1 @@
-Loading took 0.323 seconds.
 pie is delicious
-System.TypeLoadException: Could not resolve type with token 01000008 from typeref (expected class 'UnityEngine.Input' in assembly 'UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null')
-  at RezolveFile.safetyrun (System.Action act) [0x0000a] in C:\Users\Augusta\Documents\hannah\starseeds\Assets\rezz.cs:158 
-System.NullReferenceException: Object reference not set to an instance of an object
-  at test.update () [0x0002c] in <bb242130828a49748f6c5b8d4a79e88c>:0 
-  at RezolveFile.safetyrun (System.Action act) [0x0000a] in C:\Users\Augusta\Documents\hannah\starseeds\Assets\rezz.cs:158 

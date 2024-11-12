@@ -4,6 +4,7 @@ using UnityEngine;
 class annulu: Rezolve {
     GameObject cyl;
     bool _active = false;
+
     void setactive(bool active) {
         // loadin
         if(cyl != null && _active != active) {
@@ -14,6 +15,7 @@ class annulu: Rezolve {
     }
     
     public override void start() {
+        Debug.Log("running annulu");
         cyl = RezFind("cylindrical_annulus");
         //cyl = RezFind("Sphere");
     }

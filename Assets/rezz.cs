@@ -1,5 +1,7 @@
 /* the ReallyCompile routine is based on the code from http://www.arcturuscollective.com/archives/22 */
 
+#if HAVE_COMPILER
+
 using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
@@ -185,7 +187,9 @@ public class RezolveFile {
         if(rezf != null) rezf.Glitch();
         glitched = true;
     }
-};      
+};
+
+#if HAVE_COMPILER
 
 public class rezz : MonoBehaviour
 {
@@ -385,7 +389,7 @@ public class rezz : MonoBehaviour
         }
     }
 
-	System.CodeDom.Compiler.CompilerResults ReallyCompile(string name, string file)
+	System.CodeDom.Compiler CompilerResults ReallyCompile(string name, string file)
 	{
 		var provider = new CSharpCodeProvider();
 		var param = new CompilerParameters();
@@ -525,3 +529,126 @@ public class rezz : MonoBehaviour
         reload();
     }
 }
+
+#else
+
+public class rezz : MonoBehaviour
+{
+    [System.NonSerialized]
+    List<Rezolve> rezolve = new List<Rezolve>();
+    [System.NonSerialized]
+    System.Collections.Generic.Queue<Action> queue;
+    [System.NonSerialized]
+    object queuelock;
+
+    [System.NonSerialized]
+    System.Collections.Generic.Queue<string> log_queue;
+    [System.NonSerialized]
+    object errorlock;
+    [System.NonSerialized]
+    System.IO.StreamWriter log_write;
+
+    static rezz _rezz_instance = null;
+
+    public static void Log(string st)
+    {
+        if (_rezz_instance != null)
+            _rezz_instance.log(st);
+    }
+
+    void Start()
+    {
+         queue = new System.Collections.Generic.Queue<Action>();
+        queuelock = new object();
+        
+        make_log_queue();
+
+        _rezz_instance = this;
+    }
+
+    void Update()
+    {
+        Action thejam = null;
+        bool not_empty = true;
+        while (not_empty)
+        {
+            lock (queuelock)
+            {
+                if (queue.Count == 0)
+                    not_empty = false;
+                else
+                    thejam = queue.Dequeue();
+            }
+            if (thejam != null)
+            {
+                thejam.Invoke();
+                thejam = null;
+            }
+        }
+        
+        write_out_log_queue();
+        
+        foreach (Rezolve rez in rezolve)
+        {
+            rez.update();
+        }
+    }
+
+    void make_log_queue()
+    {
+        string path = System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "run.log");
+        Debug.Log("rezolve log is " + path);
+        log_write = new System.IO.StreamWriter(
+            path);
+        log_queue = new System.Collections.Generic.Queue<string>();
+        errorlock = new object();
+    }
+
+    void write_out_log_queue()
+    {
+        string towrite = "";
+        bool flush = false;
+        while (true)
+        {
+            lock (errorlock)
+            {
+                if (log_queue.Count == 0)
+                    break;
+                else
+                    towrite = log_queue.Dequeue();
+            }
+            log_write.WriteLine(towrite);
+            flush = true;
+        }
+        if (flush)
+            log_write.Flush();
+    }
+
+    void log(string mesg)
+    {
+        lock (errorlock)
+        {
+            log_queue.Enqueue(mesg);
+        }
+        Debug.Log(mesg);
+    }
+
+    void except(Exception e)
+    {
+        log(e.ToString());
+    }
+
+    void compileexcept(string probs)
+    {
+        log(probs);
+    }
+
+    public void reboot()
+    {
+        
+    }
+}
+
+#endif
+
+#endif

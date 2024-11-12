@@ -24,7 +24,7 @@ class best: Rezolve {
         put(gameend, "");
         put(hitf, "");
         
-        rezz.Log("pie is delicious");
+        rezz_static.Log("pie is delicious");
     }
     
     void put(GameObject what, string text) {

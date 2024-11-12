@@ -11,10 +11,14 @@ class glitchanimator: Rezolve { // test
     
     public override void update() { // test
         time += Time.deltaTime;
-        glitchmaterial.SetVector("_DisplacementAmount",
-            new Vector4(0.01f * (float) Math.Sin(time), 0.0f, 0.0f, 0.01f)
-            );
-        glitchmaterial.SetFloat(
-            "_WavyDisplFreq", 20 + 10.0f * (float) Math.Sin(time));
+        if (glitchmaterial != null)
+        {
+            glitchmaterial.SetVector("_DisplacementAmount",
+                new Vector4(0.01f * (float)Math.Sin(time), 0.0f, 0.0f, 0.01f)
+                );
+
+            glitchmaterial.SetFloat(
+                "_WavyDisplFreq", 20 + 10.0f * (float)Math.Sin(time));
+        }
     }
 }

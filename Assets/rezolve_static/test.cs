@@ -124,7 +124,7 @@ class test: Rezolve {
     public override void update() {
         time += Time.deltaTime;
         if(time > 1) {
-            rezz.Log(GameObject.Find("MetaCameraRig").transform.position.ToString());
+            //rezz.Log(GameObject.Find("MetaCameraRig").transform.position.ToString());
             time -= 1;
         }
         //if(GameDad.selectedStar != -1) {

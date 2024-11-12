@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731725, g: 0.13414745, b: 0.12107873, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -390,7 +390,7 @@ SphereCollider:
   m_GameObject: {fileID: 18004422}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -749,7 +749,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 196577469}
-  - component: {fileID: 196577468}
   - component: {fileID: 196577470}
   m_Layer: 0
   m_Name: reticle
@@ -758,34 +757,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &196577468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 196577467}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a0668bd68f791469ce7d80316c99df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hud: 1
-  _hudLockPosition: 1
-  _hudLockPositionX: 1
-  _hudLockPositionY: 1
-  _hudLockPositionZ: 1
-  _hudLockRotation: 1
-  _hudLockRotationX: 1
-  _hudLockRotationY: 1
-  _hudLockRotationZ: 1
-  _lockDistance: 0.4
-  _orbital: 0
-  _orbitalLockDistance: 1
-  _orbitalLookAtCamera: 1
-  _orbitalLookAtCameraFlipY: 1
-  _useDefaultHUDsettings: 1
-  _useDefaultOrbitalSettings: 1
 --- !u!4 &196577469
 Transform:
   m_ObjectHideFlags: 0
@@ -794,7 +765,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196577467}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0.34}
+  m_LocalPosition: {x: 0, y: -1.1, z: 0.34}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1034,7 +1005,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 427000657}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8b0bd0e1f43f9646b6151651dc005d8, type: 3}
+  m_Script: {fileID: 11500000, guid: c8ffb2f4b30979b428b0f9af7a5eba0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &427000659
@@ -7136,7 +7107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878630257}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2, z: 0.4}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0.4}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7152,7 +7123,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 956733091}
-  - component: {fileID: 956733090}
   - component: {fileID: 956733089}
   m_Layer: 0
   m_Name: distancepanels
@@ -7175,34 +7145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 206063250}
   doRotation: 1
---- !u!114 &956733090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956733088}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a0668bd68f791469ce7d80316c99df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hud: 1
-  _hudLockPosition: 1
-  _hudLockPositionX: 1
-  _hudLockPositionY: 1
-  _hudLockPositionZ: 1
-  _hudLockRotation: 1
-  _hudLockRotationX: 1
-  _hudLockRotationY: 1
-  _hudLockRotationZ: 1
-  _lockDistance: 0.4
-  _orbital: 0
-  _orbitalLockDistance: 1
-  _orbitalLookAtCamera: 1
-  _orbitalLookAtCameraFlipY: 1
-  _useDefaultHUDsettings: 1
-  _useDefaultOrbitalSettings: 1
 --- !u!4 &956733091
 Transform:
   m_ObjectHideFlags: 0
@@ -7659,7 +7601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f2573f3a7e89c4b989aa9234365345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rezzer: {fileID: 427000658}
 --- !u!4 &1128711929
 Transform:
   m_ObjectHideFlags: 0
